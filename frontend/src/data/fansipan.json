@@ -307,7 +307,7 @@
       "properties": {
         "name": "Phòng thông tin",
         "description": "Phòng Thông Tin hỗ trợ du khách về bản đồ, hướng dẫn tham quan, lịch trình và giải đáp thắc mắc. ",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/phongthongtin.jpg"],
         "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
       }
@@ -318,7 +318,7 @@
       "properties": {
         "name": "Chùa trình - Bảo An Thiền Tự",
         "description": "Nằm trên địa thế tuyệt đẹp ở độ cao 1604m trong quần thể Ga Hoàng Liên, Bảo An Thiền Tự là điểm dừng chân đầu tiên của du khách trước khi bước vào hành trình hành hương lễ Phật và khám khá đỉnh Fansipan Huyền thoại.",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/chuatrinhbaoanthientu1.jpg", "images/chuatrinhbaoanthientu2.jpg"],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
       }
@@ -329,7 +329,7 @@
       "properties": {
         "name": "Tháp đồng hồ",
         "description": "Sun World Fansipan Legend có Tháp Đồng Hồ nằm tại quảng trường trung tâm, gần khu vực ga cáp treo. Công trình mang phong cách kiến trúc châu Âu cổ điển, nổi bật giữa không gian núi rừng hùng vĩ của Sa Pa. Đây là điểm check-in quen thuộc và cũng là nơi du khách tập trung trước khi bắt đầu hành trình chinh phục đỉnh Fansipan.",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/thapdongho.png"],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
       }
@@ -343,7 +343,7 @@
       "properties": {
         "name": "Ga tàu hỏa leo núi Mường Hoa",
         "description": "Ga Mường Hoa là ga đến của chuyến tàu Hỏa leo núi Mường Hoa, điểm trung chuyển du khách từ thị trấn lên cảnh tiên Fansipan. Đến Ga Mường Hoa vào tháng 5 - tháng 6, du khách sẽ tìm thấy ngay vườn hoa Rum nhất Sa Pa khỏe sắc qua ô cửa kính, vườn hoa nằm ngay hoàng ra ga, bên cạnh kiến ​​trúc cổ kính làm cho du khách như câu lạc bộ khung cảnh Paris hoa lệ giữa Sa Pa.",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/gatauhoaleonuimuonghoa1.jpg", "images/gatauhoaleonuimuonghoa2.jpg"],
         "operating_hours": [
           "Thứ 2 - thứ 6: 08:15 - 18:00",
@@ -356,7 +356,7 @@
       "properties": {
         "name": "Nhà hàng Sharia",
         "description": "Nhà hàng Sharia đánh dấu sự hiện diện của không gian ẩm thực Halal đầu tiên giữa đại ngàn Tây Bắc. Không chỉ là điểm dừng chân thưởng thức ẩm thực, Sharia mở ra một trải nghiệm lắng sâu - nơi hương vị Halal hòa quyện cùng thiên nhiên hùng vĩ và nhịp điệu tĩnh tại của quần thể văn hóa tâm linh Fansipan.",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/nhahangsharia1.png", "images/nhahangsharia1.png"],
         "operating_hours": ["Mỗi ngày: 11:00 - 15:00"]
       }
@@ -367,7 +367,7 @@
       "properties": {
         "name": "Sapa Signature Inn",
         "description": "Nằm ở Sa Pa, cách Trạm cáp treo Fansipan 6.4 km, Sapa Signature Inn cung cấp chỗ nghỉ có khu vườn, chỗ đậu xe riêng miễn phí, phòng chờ chung và nhà hàng.",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/sapasignatureinn1.png", "images/sapasignatureinn1.png"],
         "operating_hours": ["Mỗi ngày: Chưa có thông tin."]
       }
@@ -378,7 +378,7 @@
       "properties": {
         "name": "Khu mua sắm",
         "description": "Khu mua sắm tại ga Hoàng Liên (Sun World Fansipan Legend) cung cấp đa dạng đặc sản Sapa và quà lưu niệm thủ công độc đáo. Du khách có thể mua mật ong rừng, thịt sấy, trà Shan Tuyết, túi thổ cẩm, hay các sản phẩm mang dấu ấn Fansipan như móc khóa, áo phông tại các gian hàng gần khu vực ga đi",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/khumuasam.png"],
         "operating_hours": ["Mỗi ngày: Chưa có thông tin."]
       }
@@ -389,7 +389,7 @@
       "properties": {
         "name": "Ga Hoàng Liên",
         "description": "Trước khi bắt đầu hành trình cáp treo lên đỉnh Fansipan, du khách có thể ghé thăm những địa điểm tại ga cáp treo Hoàng Liên. Khung cảnh ga cáp treo được bài trí rất đẹp với những cánh hoa rực rỡ sắc màu.",
-        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "area": "Khu vực Mường Hoa",
         "images": ["images/gahoanglien1.png", "images/gahoanglien2.png"],
         "operating_hours": [
           "Thứ 2 - thứ 6: 08:00 - 16:00",
@@ -405,7 +405,7 @@
       "properties": {
         "name": "Hotel de la Coupole - MGallery",
         "description": "Toạ lạc tại trung tâm của thị trấn Sapa, Hotel de la Coupole, MGallery by Sofitel là địa điểm để du khách có thể dễ dàng di chuyển đến mọi thắng cảnh nổi tiếng của Sapa cũng như tận hưởng không khí nhộn nhịp của vùng đất này. Khoảng cách: 5 tiếng từ Hà Nội đi oto, 8 tiếng từ Hà Nội đi tàu và chuyển phương tiện tại ga Lào Cai.",
-        "area": "Khu vực Sapa",
+        "area": "Khu vực Sun Plaza - Sapa",
         "images": ["images/hoteldelacoupolemgallery1.jpg", "images/hoteldelacoupolemgallery2.jpg"],
         "operating_hours": [
           "Thời gian check in: 14:00",
@@ -421,7 +421,7 @@
       "properties": {
         "name": "Trung tâm thương mại Sun Plaza",
         "description": "Tòa nhà Sun Plaza Sa Pa nằm tại ngã tư trung tâm Sa Pa, ngay đối diện Quảng trường Sa Pa, là điểm giao nhau giữa đường Phan Xi Păng và phố Hoàng Liên. Từ Nhà thờ đá Sa Pa phóng tầm mắt nhìn chếch sang bên kia đường, bạn sẽ thấy một tòa nhà lớn, xây dựng theo phong cách kiến trúc Châu Âu cổ điển, nổi bật với tháp đồng hồ lớn, đó chính là Sun Plaza.",
-        "area": "Khu vực Sapa",
+        "area": "Khu vực Sun Plaza - Sapa",
         "images": ["images/trungtamthuongmaisunplaza.png"],
         "operating_hours": ["Mỗi ngày: 07:30 - 22:00"]
       }
@@ -435,7 +435,7 @@
       "properties": {
         "name": "Ga Sapa",
         "description": "Ga Sapa nằm tại lầu 1 tòa nhà Sun Plaza, thuộc quần thể du lịch Sun World Fansipan Legend, Sapa, Lào Cai. Là điểm khởi đầu của tàu hỏa leo núi Mường Hoa, trung chuyển du khách đến ga Mường Hoa để chinh phục đỉnh Fansipan. Nhà ga Sapa mang đậm phong cách châu u vừa cổ điển vừa hiện đại.",
-        "area": "Khu vực Sapa",
+        "area": "Khu vực Sun Plaza - Sapa",
         "images": ["images/gasapa.jpg"],
         "operating_hours": ["Mỗi ngày: 06:30 - 18:00"]
       }

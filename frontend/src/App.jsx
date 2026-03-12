@@ -24,7 +24,7 @@ const Home = () => {
     setIsLoading(true); // Bật trạng thái đang tải
 
     const sapaSample = `Fansipan View`; 
-    const defaultArea = "Khu vực Sun Plaza - Mường Hoa"; 
+    const defaultArea = "Khu vực Mường Hoa"; 
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(

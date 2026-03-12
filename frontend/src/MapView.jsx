@@ -63,6 +63,43 @@ const RoutingMachine = ({ segments }) => {
   return null;
 };
 
+// Component chạy song song: Chuyên vẽ đường chim bay cáp treo
+const StraightLineMachine = ({ routes }) => {
+  const map = useMap();
+  const linesRef = useRef([]);
+
+  useEffect(() => {
+    // 1. Xóa các đường thẳng cũ trước khi vẽ đường mới
+    linesRef.current.forEach(line => {
+      if (map) map.removeLayer(line);
+    });
+    linesRef.current = [];
+
+    // 2. Lặp qua mảng routes (được tạo từ hàm addLine) để vẽ
+    if (map && routes && routes.length > 0) {
+      routes.forEach(routePoints => {
+        // Vẽ thẳng bằng L.polyline của Leaflet, không xài thẻ <Polyline>
+        const line = L.polyline(routePoints, {
+          color: '#1d61ff', 
+          weight: 4, 
+          dashArray: '8, 8', // Nét đứt
+          opacity: 0.9
+        }).addTo(map);
+        linesRef.current.push(line);
+      });
+    }
+
+    return () => {
+      linesRef.current.forEach(line => {
+        if (map) map.removeLayer(line);
+      });
+      linesRef.current = [];
+    };
+  }, [map, routes]);
+
+  return null;
+};
+
 const InitialFlyToUser = ({ coords, markerRef }) => {
   const map = useMap();
   useEffect(() => {
@@ -98,10 +135,11 @@ const MapView = () => {
   const centerPosition = [22.303246, 103.777648];
   
   const gpsInfo = location.state?.gpsInfo || "Đang xác định vị trí của bạn...";
-  const currentArea = location.state?.areaData || "Khu vực Sun Plaza - Mường Hoa"; 
+  const currentArea = location.state?.areaData || "Khu vực Mường Hoa"; 
 
   const [routeSegments, setRouteSegments] = useState(null);
   const [isRouting, setIsRouting] = useState(false); // THÊM DÒNG NÀY
+  const [cableCarRoute, setCableCarRoute] = useState(null);
 
   // HÀM: Đưa camera về lại vị trí hiện tại của user
   const handleReturnToMyLocation = () => {
@@ -118,6 +156,47 @@ const MapView = () => {
         }
       }, 1300);
     }
+  };
+
+  // Hàm chạy song song: Chỉ bắt các chặng đi qua cáp treo để vẽ thẳng
+  const handleGetCableCarLine = () => {
+    if (!selectedPlace) return;
+
+    const destinationArea = fansipanData.features.find(f => f.properties.name === selectedPlace.name)?.properties.area;
+    if (!destinationArea) return;
+
+    // Toạ độ đường cáp treo Fansipan (Ga Hoàng Liên - Ga Fansipan)
+    const p_GaHoangLien = [22.3370, 103.824194];
+    const p_GaFansipan = [22.30655, 103.774694];
+    const straightPoints = [p_GaHoangLien, p_GaFansipan];
+
+    const p_GaSapa = [22.334254, 103.840374];
+    const p_GaMuongHoa = [22.336618, 103.825004];
+    const straightPointsSapa = [p_GaMuongHoa,[22.33486, 103.8308],  [22.3345, 103.832], [22.3339, 103.8338], [22.33319, 103.836], [22.33307, 103.837] ,[22.3331, 103.838], [22.33345, 103.839], [22.333797, 103.8399], [22.3340, 103.84028], p_GaSapa];// [22.334254, 103.840374]
+
+    const linesToDraw = []; // Mảng chứa các đường chim bay
+
+    // HÀM addLine ĐỂ PUSH DỮ LIỆU
+    const addLine = (points) => {
+      linesToDraw.push(points);
+    };
+
+    // Kiểm tra nếu đi qua lại giữa khu vực có cáp treo thì gọi addLine
+    if (currentArea !== destinationArea) {
+      if (
+        (currentArea === "Khu vực Fansipan" && destinationArea !== "Khu vực Fansipan") || (currentArea !== "Khu vực Fansipan" && destinationArea === "Khu vực Fansipan")
+      ) {
+        addLine(straightPoints); // Gọi hàm addLine
+      }
+      else if (
+         (currentArea === "Khu vực Sun Plaza - Sapa" && destinationArea !== "Khu vực Sun Plaza - Sapa") || (currentArea !== "Khu vực Sun Plaza - Sapa" && destinationArea === "Khu vực Sun Plaza - Sapa")
+      ){
+        addLine(straightPointsSapa); // Gọi hàm addLine
+      }
+    }
+    
+    // Ném mảng cho Component StraightLineMachine vẽ
+    setCableCarRoute(linesToDraw);
   };
 
   const redPinIcon = useMemo(() => L.divIcon({
@@ -181,13 +260,13 @@ const filteredPlaces = useMemo(() => {
       const segments = [];
       
       // 1. XUẤT PHÁT TỪ: MƯỜNG HOA
-      if (currentArea === "Khu vực Sun Plaza - Mường Hoa") {
+      if (currentArea === "Khu vực Mường Hoa") {
         if (destinationArea === "Khu vực Fansipan") {
           segments.push([myLocationCoords, p_GaHoangLien]);
           if (selectedPlace.name !== "Ga Fansipan") {
             segments.push([p_GaFansipan, destination]);
           }
-        } else if (destinationArea === "Khu vực Sapa") {
+        } else if (destinationArea === "Khu vực Sun Plaza - Sapa") {
           segments.push([myLocationCoords, p_GaMuongHoa]);
           if (selectedPlace.name !== "Ga Sapa") {
             segments.push([p_GaSapa, destination]);
@@ -200,11 +279,11 @@ const filteredPlaces = useMemo(() => {
         // Chặng 1: Từ vị trí hiện tại ra Ga Fansipan
         segments.push([myLocationCoords, p_GaFansipan]); 
 
-        if (destinationArea === "Khu vực Sun Plaza - Mường Hoa") {
+        if (destinationArea === "Khu vực Mường Hoa") {
           if (selectedPlace.name !== "Ga Hoàng Liên") {
             segments.push([p_GaHoangLien, destination]);
           }
-        } else if (destinationArea === "Khu vực Sapa") {
+        } else if (destinationArea === "Khu vực Sun Plaza - Sapa") {
           // THIẾU Ở ĐÂY ĐÃ ĐƯỢC THÊM: Đi bộ nối chuyến từ Hoàng Liên sang Mường Hoa
           segments.push([p_GaHoangLien, p_GaMuongHoa]);
           
@@ -216,11 +295,11 @@ const filteredPlaces = useMemo(() => {
       }
 
       // 3. XUẤT PHÁT TỪ: SAPA
-      else if (currentArea === "Khu vực Sapa") {
+      else if (currentArea === "Khu vực Sun Plaza - Sapa") {
         // Chặng 1: Từ vị trí hiện tại ra Ga Sapa
         segments.push([myLocationCoords, p_GaSapa]);
 
-        if (destinationArea === "Khu vực Sun Plaza - Mường Hoa") {
+        if (destinationArea === "Khu vực Mường Hoa") {
           if (selectedPlace.name !== "Ga Mường Hoa") {
             segments.push([p_GaMuongHoa, destination]);
           }
@@ -288,6 +367,7 @@ const filteredPlaces = useMemo(() => {
 
         {/* LOGIC VẼ ĐƯỜNG ĐÃ ĐƯỢC CHIA TRƯỜNG HỢP VÀ DÙNG OSRM */}
         {routeSegments && <RoutingMachine segments={routeSegments} />}
+        <StraightLineMachine routes={cableCarRoute} />
         
         <Marker position={myLocationCoords} icon={redPinIcon} ref={redMarkerRef}>
           <Popup>
@@ -365,7 +445,12 @@ const filteredPlaces = useMemo(() => {
               </div>
             </div>
             
-            <button className="direction-btn" style={{ background: '#1d61ff', color: '#ffffff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', marginTop: '15px', fontWeight: 'bold' }} onClick={handleGetDirections}>
+            <button className="direction-btn" style={{ background: '#1d61ff', color: '#ffffff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', marginTop: '15px', fontWeight: 'bold' }} 
+                            onClick={() => {
+                  handleGetDirections();     // Tiến trình 1: Server dò đường
+                  handleGetCableCarLine();   // Tiến trình 2: Chim bay cáp treo
+                }}
+            >
               <FiNavigation style={{ fontSize: '20px', marginRight: '10px' }} /> Chỉ đường đến đây
             </button>
           </div>
