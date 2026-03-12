@@ -130,7 +130,7 @@ const MapView = () => {
   const location = useLocation();
   const redMarkerRef = useRef(null);
   const mapRef = useRef(null); // THÊM DÒNG NÀY
-
+  //const [myLocationCoords, setMyLocationCoords] = useState([22.3371665, 103.824208]); // Vẫn giữ tọa độ mặc định phòng khi chưa load được GPSconst myLocationCoords = useMemo(() => [22.3371665, 103.824208], []);
   const myLocationCoords = useMemo(() => [22.3371665, 103.824208], []);
   const centerPosition = [22.303246, 103.777648];
   
@@ -140,6 +140,39 @@ const MapView = () => {
   const [routeSegments, setRouteSegments] = useState(null);
   const [isRouting, setIsRouting] = useState(false); // THÊM DÒNG NÀY
   const [cableCarRoute, setCableCarRoute] = useState(null);
+
+
+  //! HÀM NÀY ĐƯỢC BẬT VÀ SÀI ĐỂ LẤY VỊ TRÍ TRỰC TIẾP TỪ GPS VÀ CẬP NHẬT LIÊN TỤC THEO THỜI GIAN THỰC (REAL-TIME) TRÊN BẢN ĐỒ.
+  // useEffect(() => {
+  //   if (!navigator.geolocation) {
+  //     console.error("Trình duyệt của bạn không hỗ trợ định vị GPS.");
+  //     return;
+  //   }
+
+
+  //   const watchId = navigator.geolocation.watchPosition(
+  //     (position) => {
+  //   
+  //       const newCoords = [position.coords.latitude, position.coords.longitude];
+        
+  //   
+  //       setMyLocationCoords(newCoords);
+  //     },
+  //     (error) => {
+  //       console.error("Lỗi lấy vị trí liên tục: ", error);
+  //     },
+  //     {
+  //       enableHighAccuracy: true, // Bật chế độ chính xác cao nhất (Dùng GPS xịn)
+  //       maximumAge: 0,            // Không dùng dữ liệu cũ lưu trong bộ nhớ tạm
+  //       timeout: 10000            // Cập nhật nếu quá 10 giây không có phản hồi
+  //     }
+  //   );
+
+  //   // Khi người dùng thoát khỏi trang Map, phải tắt radar đi để đỡ tốn pin điện thoại
+  //   return () => {
+  //     navigator.geolocation.clearWatch(watchId);
+  //   };
+  // }, []); // Mảng rỗng [] giúp radar chỉ khởi động 1 lần duy nhất khi mở Map
 
   // HÀM: Đưa camera về lại vị trí hiện tại của user
   const handleReturnToMyLocation = () => {
@@ -249,7 +282,7 @@ const filteredPlaces = useMemo(() => {
     // Toạ độ các trạm giao thông cố định (Gateways)
     const p_GaSapa = [22.334254, 103.840374];
     const p_GaMuongHoa = [22.336618, 103.825004];
-    const p_GaHoangLien = [22.336944, 103.824194];
+    const p_GaHoangLien = [22.33707, 103.8243];
     const p_GaFansipan = [22.306694, 103.774694];
 
   if (currentArea === destinationArea) {

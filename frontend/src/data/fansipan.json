@@ -3,7 +3,7 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.774694, 22.3065] },
+      "geometry": { "type": "Point", "coordinates": [103.774694, 22.306694 ] }, 
       "properties": {
         "name": "Shop Tuyết Tùng",
         "description": "Cửa hàng lưu niệm nằm trong khu tham quan Fansipan, cung cấp quà tặng, đặc sản vùng cao và sản phẩm mang dấu ấn đỉnh núi. Đây là điểm dừng chân thuận tiện trước hoặc sau khi tham quan khu tâm linh.",
@@ -14,7 +14,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.774694, 22.306694] },
+      "geometry": { "type": "Point", "coordinates": [103.774694, 22.3065] },
       "properties": {
         "name": "Ga Fansipan",
         "description": " Ga trung chuyển kết nối hệ thống cáp treo với khu vực đỉnh Fansipan. Từ đây, du khách bắt đầu hành trình khám phá quần thể tâm linh và chinh phục “Nóc nhà Đông Dương”.",
@@ -121,7 +121,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77526950252076, 22.306252056222462]
+        "coordinates": [103.77518, 22.306252056222462]
       },
       "properties": {
         "name": "Nhà Hàng Hải Cảng Fansipan",
@@ -147,7 +147,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.775611, 22.304583] },
+      "geometry": { "type": "Point", "coordinates": [103.775611, 22.3045] },
       "properties": {
         "name": "Thác nước 9 tầng",
         "description": "Công trình cao 30m, gồm 9 tầng nước chảy tràn qua các cột đá được chạm khắc kinh Phật. Hai bên thác là 150 bậc thang đá dành cho du khách tản bộ. Tiếng nước chảy róc rách kết hợp với không gian tâm linh mang lại cảm giác bình an và thanh thản.",
@@ -160,7 +160,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77544909729988, 22.304558497877835]
+        "coordinates": [103.7754, 22.3044]
       },
       "properties": {
         "name": "Đại tượng Phật",
@@ -213,7 +213,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.7756726831326, 22.303715405732746]
+        "coordinates": [103.77560, 22.30356]
       },
       "properties": {
         "name": "Lầu vọng cảnh",
@@ -238,7 +238,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77689508435537, 22.30402659089917]
+        "coordinates": [103.77682, 22.3039]
       },
       "properties": {
         "name": "Chòi nghỉ",
@@ -385,7 +385,7 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.824194, 22.336944] },
+      "geometry": { "type": "Point", "coordinates": [103.8243, 22.33707] },
       "properties": {
         "name": "Ga Hoàng Liên",
         "description": "Trước khi bắt đầu hành trình cáp treo lên đỉnh Fansipan, du khách có thể ghé thăm những địa điểm tại ga cáp treo Hoàng Liên. Khung cảnh ga cáp treo được bài trí rất đẹp với những cánh hoa rực rỡ sắc màu.",
