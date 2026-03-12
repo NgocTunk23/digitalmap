@@ -1,0 +1,444 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.774694, 22.3065] },
+      "properties": {
+        "name": "Shop Tuyết Tùng",
+        "description": "Cửa hàng lưu niệm nằm trong khu tham quan Fansipan, cung cấp quà tặng, đặc sản vùng cao và sản phẩm mang dấu ấn đỉnh núi. Đây là điểm dừng chân thuận tiện trước hoặc sau khi tham quan khu tâm linh.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/shoptuyettung.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.774694, 22.306694] },
+      "properties": {
+        "name": "Ga Fansipan",
+        "description": " Ga trung chuyển kết nối hệ thống cáp treo với khu vực đỉnh Fansipan. Từ đây, du khách bắt đầu hành trình khám phá quần thể tâm linh và chinh phục “Nóc nhà Đông Dương”.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/gatauhoaleonuifansipan.jpg"],
+        "operating_hours": [
+          "Thứ 2 - Thứ 5: 08:00 - 16:00",
+          "Thứ 6: 08:00 - 17:00",
+          "Thứ 7: 07:30 - 17:00",
+          "Chủ nhật: 07:30 - 16:00"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77548753322515, 22.305907947006077]
+      },
+      "properties": {
+        "name": "Đại Hồng Chung",
+        "description": "Đại hồng chung nằm trong khu tâm linh trên đỉnh Fansipan. Tiếng chuông vang giữa núi rừng tạo nên không gian trang nghiêm và thanh tịnh cho du khách chiêm bái.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/daihongchung.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77485739902318, 22.306216615127]
+      },
+      "properties": {
+        "name": "Thanh Vân Đắc Lộ",
+        "description": " Lối đi giữa khu tâm linh, nơi du khách có thể tản bộ và ngắm biển mây quanh đỉnh núi. Đây là tuyến kết nối nhiều công trình quan trọng trên đỉnh.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/thanhvandaclo.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77496184254352, 22.305818916264755]
+      },
+      "properties": {
+        "name": "Đền thờ Tam Thánh Mẫu",
+        "description": "Công trình tâm linh tôn vinh tín ngưỡng thờ Mẫu Việt Nam. Không gian trang nghiêm, là điểm dừng chân cầu bình an khi tham quan Fansipan.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/denthotamthanhmau.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77506341851324, 22.305674339020584]
+      },
+      "properties": {
+        "name": "Chùa Hạ - Bích Vân Thiền Tự",
+        "area": "Khu vực Fansipan",
+        "description": "Ngôi chùa thuộc quần thể tâm linh Fansipan, thiết kế theo kiến trúc truyền thống Việt Nam. Đây là điểm chiêm bái quan trọng trước khi tiếp tục hành trình lên cao.",
+        "images": ["images/chuabichvanthientu.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77514546064435, 22.305510785832396]
+      },
+      "properties": {
+        "name": "Đền thờ Đức Thánh Trần",
+        "description": "Công trình tưởng niệm anh hùng dân tộc Trần Hưng Đạo trong khu tâm linh trên đỉnh. Điểm tham quan mang giá trị lịch sử và văn hóa.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/denthoducthanhtran.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.7752994848766, 22.305290214306225]
+      },
+      "properties": {
+        "name": "Ga tàu hỏa leo núi Fansipan",
+        "description": "Ga thuộc tuyến tàu hỏa leo núi nội khu trên đỉnh Fansipan. Tuyến tàu ngắn kết nối Ga cáp treo Fansipan với khu Đại tượng Phật, hỗ trợ du khách di chuyển thuận tiện thay vì đi bộ qua nhiều bậc thang.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/gatauhoaleonuifansipan.jpg"],
+        "operating_hours": [
+          "Thứ 2 - Thứ 5: 08:00 - 16:00",
+          "Thứ 6: 08:00 - 17:00",
+          "Thứ 7: 07:30 - 17:00",
+          "Chủ nhật: 07:30 - 16:00"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77526950252076, 22.306252056222462]
+      },
+      "properties": {
+        "name": "Nhà Hàng Hải Cảng Fansipan",
+        "description": "Nhà hàng phục vụ ẩm thực trong khu tham quan Fansipan, là điểm nghỉ chân và dùng bữa giữa khung cảnh núi rừng hùng vĩ.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/nhahanghaicangfansipanlegend.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77560430414542, 22.305046447138267]
+      },
+      "properties": {
+        "name": "Vân Sơn trà quán",
+        "description": "Nằm trên đường từ ga Fansipan lên đỉnh núi, đây là không gian thưởng trà tĩnh lặng được thiết kế theo kiến trúc chùa Việt cổ. Tại đây, du khách có thể thưởng thức những tách trà nóng trong không gian âm nhạc thiền định và ngắm nhìn mây ngàn cùng rừng nguyên sinh hùng vĩ của dãy Hoàng Liên Sơn.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/vansontraquan.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.775611, 22.304583] },
+      "properties": {
+        "name": "Thác nước 9 tầng",
+        "description": "Công trình cao 30m, gồm 9 tầng nước chảy tràn qua các cột đá được chạm khắc kinh Phật. Hai bên thác là 150 bậc thang đá dành cho du khách tản bộ. Tiếng nước chảy róc rách kết hợp với không gian tâm linh mang lại cảm giác bình an và thanh thản.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/thacnuoc9tang.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77544909729988, 22.304558497877835]
+      },
+      "properties": {
+        "name": "Đại tượng Phật",
+        "description": "Đây là bức tượng Phật bằng đồng cao nhất Việt Nam: 21,5m, nằm tại vị trí trung tâm, uy nghi, sừng sững giữa đất trời, bao quát toàn bộ không gian núi rừng Tây Bắc.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/daituongphat1.png", "images/daituongphat2.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.775222, 22.304444] },
+      "properties": {
+        "name": "Xá Lợi Phật",
+        "description": "Ngọc Xá lợi Phật được đặt trang trọng trong tháp pha lê lưu ly 7 tầng, bên trong lòng Đại tượng Phật A Di Đà. Đây là bảo vật tâm linh quý giá được cúng dường từ các cao tăng Myanmar, thu hút đông đảo phật tử đến chiêm bái và cầu nguyện bình an.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/xaloiphat1.png", "images/xaloiphat2.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.7753283639409, 22.303599337535488]
+      },
+      "properties": {
+        "name": "Cột cờ",
+        "description": "Cột cờ cao nhất Đông Dương với chiều cao 25m, được xây dựng tỉ mỉ từ đá xanh Thanh Hóa và gỗ tứ thiết. Đế cột cờ có các phù điêu chạm khắc tinh xảo hình ảnh văn hóa đặc trưng của Việt Nam như nhà sàn Tây Bắc, cồng chiêng Tây Nguyên.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/cotco.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.7753392834195, 22.303328231390452]
+      },
+      "properties": {
+        "name": "Đỉnh Fansipan",
+        "description": "\"Nóc nhà Đông Dương\" ở độ cao 3.143m. Đây là điểm check-in quan trọng nhất với các cột mốc đánh dấu cao độ. Từ đây, du khách có thể phóng tầm mắt ngắm nhìn toàn cảnh dãy Hoàng Liên Sơn và thung lũng Mường Hoa giữa biển mây bồng bềnh.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/dinhfansipan1.png", "images/dinhfansipan2.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.7756726831326, 22.303715405732746]
+      },
+      "properties": {
+        "name": "Lầu vọng cảnh",
+        "description": " Đây là điểm dừng chân lý tưởng để ngắm toàn cảnh khu du lịch và thiên nhiên Sapa từ trên cao. ",
+        "area": "Khu vực Fansipan",
+        "images": ["images/lauvongcanh.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.775889, 22.303611] },
+      "properties": {
+        "name": "Nhà Tổ",
+        "description": "Nằm trong quần thể kiến trúc tâm linh, Nhà Tổ là nơi thờ tự các vị sư tổ theo truyền thống Phật giáo Việt Nam. Kiến trúc nơi đây mang đậm nét hoài cổ với mái ngói đao cong, lẩn khuất trong làn sương khói mờ ảo.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/nhato.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77689508435537, 22.30402659089917]
+      },
+      "properties": {
+        "name": "Chòi nghỉ",
+        "description": "Chòi Nghỉ là điểm dừng chân lý tưởng cho du khách trên hành trình tham quan khu tâm linh. Tại đây, du khách có thể nghỉ ngơi, ngắm cảnh núi rừng Sa Pa và tận hưởng không khí trong lành, yên tĩnh.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/choinghi.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30 (theo giờ mở cửa của khu tham quan)"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.776056, 22.303556] },
+      "properties": {
+        "name": "Chùa thượng - Vân Phong Thiền Tự",
+        "description": "Ngôi chùa toạ lạc ở độ cao 3.091m, được thiết kế theo kiến trúc thời Trần bao gồm Tam bảo, Nhà tổ và 2 dãy hành lang. Nằm giữa không gian hùng vĩ của đỉnh Fansipan huyền thoại, sở hữu vẻ đẹp bồng lai, là chốn linh thiêng, mang đến sự an lành, bình yên cho du khách.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/chuathuongvanphongthientu1.jpg", "images/chuathuongvanphongthientu2.jpg", "images/chuathuongvanphongthientu3.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.776528, 22.3035] },
+      "properties": {
+        "name": "Bảo Tháp",
+        "description": "Công trình tâm linh nổi bật trong khu vực, mang ý nghĩa lưu giữ giá trị Phật giáo và biểu tượng cho sự giác ngộ. Bảo tháp cao 11 tầng, bề mặt tháp được ghép từ đá, đỉnh hình tháp hoa sen được đúc bằng đồng. Công trình mang phong cách kiến trúc đặc trưng của miền Bắc như tháp Phổ Minh (Nam Định), tháp Bình Sơn (Vĩnh Phúc).",
+        "area": "Khu vực Fansipan",
+        "images": ["images/baothap1.jpg", "images/baothap2.jpg", "images/baothap3.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77730569976654, 22.303312272412228]
+      },
+      "properties": {
+        "name": "Tượng Quán Thế Âm Bồ Tát",
+        "description": "Tượng Quán Thế Âm Bồ Tát được đặt tại vị trí trang trọng, được đúc bằng đồng, cao 12m, nặng 18 tấn, mắt hướng nhìn về phía Đông, tay phải của tượng cầm cành dương liễu, tay trái cầm bình cam lộ biểu trưng cho lòng từ bi và nhân ái. Chắp tay trước tượng đồng Quan thế âm Bồ Tát ngự trên tảng đá lớn với tầm nhìn hướng xuống dân gian, du khách sẽ cảm thấy lòng an yên đến lạ.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/tuongquantheambotat1.jpg", "images/tuongquantheambotat2.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77764787907557, 22.30324571862225]
+      },
+      "properties": {
+        "name": "Miếu Sơn Thần",
+        "description": "Miếu thờ thần núi với kiến trúc, đường nét trang trí của thời Trần. Núi tượng trưng cho chiều cao và vị trí trung tâm, gắn liền với các yếu tố linh thiêng vì đặc điểm cao, thẳng đứng và gần trời. Miếu Sơn Thần nhắc nhở mọi người trân trọng thiên nhiên, bảo vệ nguồn nước khoáng ngầm và gìn giữ tài nguyên cho thế hệ sau.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/mieusonthan1.jpg", "images/mieusonthan2.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.82450600927933, 22.339325968279624]
+      },
+      "properties": {
+        "name": "Phòng thông tin",
+        "description": "Phòng Thông Tin hỗ trợ du khách về bản đồ, hướng dẫn tham quan, lịch trình và giải đáp thắc mắc. ",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/phongthongtin.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 17:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.823694, 22.338056] },
+      "properties": {
+        "name": "Chùa trình - Bảo An Thiền Tự",
+        "description": "Nằm trên địa thế tuyệt đẹp ở độ cao 1604m trong quần thể Ga Hoàng Liên, Bảo An Thiền Tự là điểm dừng chân đầu tiên của du khách trước khi bước vào hành trình hành hương lễ Phật và khám khá đỉnh Fansipan Huyền thoại.",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/chuatrinhbaoanthientu1.jpg", "images/chuatrinhbaoanthientu2.jpg"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.824722, 22.339167] },
+      "properties": {
+        "name": "Tháp đồng hồ",
+        "description": "Sun World Fansipan Legend có Tháp Đồng Hồ nằm tại quảng trường trung tâm, gần khu vực ga cáp treo. Công trình mang phong cách kiến trúc châu Âu cổ điển, nổi bật giữa không gian núi rừng hùng vĩ của Sa Pa. Đây là điểm check-in quen thuộc và cũng là nơi du khách tập trung trước khi bắt đầu hành trình chinh phục đỉnh Fansipan.",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/thapdongho.png"],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.8250042730345, 22.336618744374334]
+      },
+      "properties": {
+        "name": "Ga tàu hỏa leo núi Mường Hoa",
+        "description": "Ga Mường Hoa là ga đến của chuyến tàu Hỏa leo núi Mường Hoa, điểm trung chuyển du khách từ thị trấn lên cảnh tiên Fansipan. Đến Ga Mường Hoa vào tháng 5 - tháng 6, du khách sẽ tìm thấy ngay vườn hoa Rum nhất Sa Pa khỏe sắc qua ô cửa kính, vườn hoa nằm ngay hoàng ra ga, bên cạnh kiến ​​trúc cổ kính làm cho du khách như câu lạc bộ khung cảnh Paris hoa lệ giữa Sa Pa.",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/gatauhoaleonuimuonghoa1.jpg", "images/gatauhoaleonuimuonghoa2.jpg"],
+        "operating_hours": [
+          "Thứ 2 - thứ 6: 08:15 - 18:00",
+          "Thứ bảy - chủ nhật: 07:45 - 18:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.824, 22.337583] },
+      "properties": {
+        "name": "Nhà hàng Sharia",
+        "description": "Nhà hàng Sharia đánh dấu sự hiện diện của không gian ẩm thực Halal đầu tiên giữa đại ngàn Tây Bắc. Không chỉ là điểm dừng chân thưởng thức ẩm thực, Sharia mở ra một trải nghiệm lắng sâu - nơi hương vị Halal hòa quyện cùng thiên nhiên hùng vĩ và nhịp điệu tĩnh tại của quần thể văn hóa tâm linh Fansipan.",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/nhahangsharia1.png", "images/nhahangsharia1.png"],
+        "operating_hours": ["Mỗi ngày: 11:00 - 15:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.824222, 22.337389] },
+      "properties": {
+        "name": "Sapa Signature Inn",
+        "description": "Nằm ở Sa Pa, cách Trạm cáp treo Fansipan 6.4 km, Sapa Signature Inn cung cấp chỗ nghỉ có khu vườn, chỗ đậu xe riêng miễn phí, phòng chờ chung và nhà hàng.",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/sapasignatureinn1.png", "images/sapasignatureinn1.png"],
+        "operating_hours": ["Mỗi ngày: Chưa có thông tin."]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.824083, 22.3375] },
+      "properties": {
+        "name": "Khu mua sắm",
+        "description": "Khu mua sắm tại ga Hoàng Liên (Sun World Fansipan Legend) cung cấp đa dạng đặc sản Sapa và quà lưu niệm thủ công độc đáo. Du khách có thể mua mật ong rừng, thịt sấy, trà Shan Tuyết, túi thổ cẩm, hay các sản phẩm mang dấu ấn Fansipan như móc khóa, áo phông tại các gian hàng gần khu vực ga đi",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/khumuasam.png"],
+        "operating_hours": ["Mỗi ngày: Chưa có thông tin."]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [103.824194, 22.336944] },
+      "properties": {
+        "name": "Ga Hoàng Liên",
+        "description": "Trước khi bắt đầu hành trình cáp treo lên đỉnh Fansipan, du khách có thể ghé thăm những địa điểm tại ga cáp treo Hoàng Liên. Khung cảnh ga cáp treo được bài trí rất đẹp với những cánh hoa rực rỡ sắc màu.",
+        "area": "Khu vực Sun Plaza - Mường Hoa",
+        "images": ["images/gahoanglien1.png", "images/gahoanglien2.png"],
+        "operating_hours": [
+          "Thứ 2 - thứ 6: 08:00 - 16:00",
+          "Thứ 7 & Chủ nhật: 7:45- 18:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.8403822702989, 22.33477243242416]
+      },
+      "properties": {
+        "name": "Hotel de la Coupole - MGallery",
+        "description": "Toạ lạc tại trung tâm của thị trấn Sapa, Hotel de la Coupole, MGallery by Sofitel là địa điểm để du khách có thể dễ dàng di chuyển đến mọi thắng cảnh nổi tiếng của Sapa cũng như tận hưởng không khí nhộn nhịp của vùng đất này. Khoảng cách: 5 tiếng từ Hà Nội đi oto, 8 tiếng từ Hà Nội đi tàu và chuyển phương tiện tại ga Lào Cai.",
+        "area": "Khu vực Sapa",
+        "images": ["images/hoteldelacoupolemgallery1.jpg", "images/hoteldelacoupolemgallery2.jpg"],
+        "operating_hours": [
+          "Thời gian check in: 14:00",
+          "Thời gian check out: 12:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.84049057179391, 22.334589818644332]
+      },
+      "properties": {
+        "name": "Trung tâm thương mại Sun Plaza",
+        "description": "Tòa nhà Sun Plaza Sa Pa nằm tại ngã tư trung tâm Sa Pa, ngay đối diện Quảng trường Sa Pa, là điểm giao nhau giữa đường Phan Xi Păng và phố Hoàng Liên. Từ Nhà thờ đá Sa Pa phóng tầm mắt nhìn chếch sang bên kia đường, bạn sẽ thấy một tòa nhà lớn, xây dựng theo phong cách kiến trúc Châu Âu cổ điển, nổi bật với tháp đồng hồ lớn, đó chính là Sun Plaza.",
+        "area": "Khu vực Sapa",
+        "images": ["images/trungtamthuongmaisunplaza.png"],
+        "operating_hours": ["Mỗi ngày: 07:30 - 22:00"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.84037476243441, 22.334254039038]
+      },
+      "properties": {
+        "name": "Ga Sapa",
+        "description": "Ga Sapa nằm tại lầu 1 tòa nhà Sun Plaza, thuộc quần thể du lịch Sun World Fansipan Legend, Sapa, Lào Cai. Là điểm khởi đầu của tàu hỏa leo núi Mường Hoa, trung chuyển du khách đến ga Mường Hoa để chinh phục đỉnh Fansipan. Nhà ga Sapa mang đậm phong cách châu u vừa cổ điển vừa hiện đại.",
+        "area": "Khu vực Sapa",
+        "images": ["images/gasapa.jpg"],
+        "operating_hours": ["Mỗi ngày: 06:30 - 18:00"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+services:
+  fansipan_web:
+    build: ./frontend
+    container_name: fansipan_frontend_prod
+    ports:
+      - "80:80" # Truy cập thẳng qua http://localhost
+    restart: always
