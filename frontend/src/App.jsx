@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react'; // THÊM useState Ở ĐÂY
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import MapView from './MapView';
 import './App.css';
-// IMPORT THÊM FILE DATA ĐỂ TÍNH TOÁN ĐIỂM GẦN NHẤT
 import fansipanData from './data/fansipan.json';
 
-// 1. Công thức tính khoảng cách Haversine (km)
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Bán kính Trái Đất
+  const R = 6371; 
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = 
@@ -19,21 +17,22 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
 const Home = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // STATE: Quản lý trạng thái loading
 
   const handleStart = () => {
-    const sapaSample = `Vị trí số 2 Fansipan, thị trấn Sa Pa...`; 
+    if (isLoading) return; // Nếu đang loading rồi thì không cho bấm nữa
+    setIsLoading(true); // Bật trạng thái đang tải
+
+    const sapaSample = `Fansipan View`; 
     const defaultArea = "Khu vực Sun Plaza - Mường Hoa"; 
 
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-
-          // TÌM ĐIỂM GẦN NHẤT TRONG DỮ LIỆU
           let minDistance = Infinity;
           let nearestArea = defaultArea;
 
-          // Duyệt qua tất cả các điểm để tìm điểm gần người dùng nhất
           fansipanData.features.forEach(feature => {
             const fLat = feature.geometry.coordinates[1];
             const fLng = feature.geometry.coordinates[0];
@@ -48,40 +47,30 @@ const Home = () => {
           let locationData = "";
           let finalAreaData = "";
 
-          // NẾU ĐIỂM GẦN NHẤT LỚN HƠN 100KM (Người dùng đang ở ngoài Sapa)
           if (minDistance > 100) {
             locationData = sapaSample;
             finalAreaData = defaultArea;
           } else {
-            // NẾU Ở GẦN (Dưới 100km): Lấy area của điểm gần nhất
             locationData = `Tọa độ hiện tại của bạn: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}...`;
             finalAreaData = nearestArea; 
           }
 
+          setIsLoading(false); // Tắt loading
           navigate('/map', { 
-            state: { 
-              gpsInfo: locationData, 
-              areaData: finalAreaData // Gửi areaData qua MapView
-            } 
+            state: { gpsInfo: locationData, areaData: finalAreaData } 
           });
         },
         (error) => {
-          // Lỗi GPS: Dùng vị trí mẫu
+          setIsLoading(false); // Tắt loading
           navigate('/map', { 
-            state: { 
-              gpsInfo: sapaSample, 
-              areaData: defaultArea 
-            } 
+            state: { gpsInfo: sapaSample, areaData: defaultArea } 
           });
         }
       );
     } else {
-      // Trình duyệt không hỗ trợ GPS
+      setIsLoading(false);
       navigate('/map', { 
-        state: { 
-          gpsInfo: sapaSample, 
-          areaData: defaultArea 
-        } 
+        state: { gpsInfo: sapaSample, areaData: defaultArea } 
       });
     }
   };
@@ -97,7 +86,6 @@ const Home = () => {
           </svg>
         </div>
 
-        {/* Font Segoe UI ép mập tròn */}
         <h1 className="brand-name" style={{ 
           fontFamily: '"Segoe UI", sans-serif', 
           fontWeight: 900, 
@@ -107,12 +95,20 @@ const Home = () => {
           Sunworld Fansipan Legend
         </h1>
 
-        <button className="btn-start" onClick={handleStart} style={{ 
-          fontFamily: '"Segoe UI", sans-serif', 
-          fontWeight: 600,
-          cursor: 'pointer'
-        }}>
-          Khám Phá Bản Đồ <span style={{ marginLeft: '10px' }}>→</span>
+        <button 
+          className="btn-start" 
+          onClick={handleStart} 
+          disabled={isLoading} // Vô hiệu hoá nút khi đang tải
+          style={{ 
+            fontFamily: '"Segoe UI", sans-serif', 
+            fontWeight: 600,
+            cursor: isLoading ? 'wait' : 'pointer', // Đổi con trỏ chuột thành hình xoay xoay
+            opacity: isLoading ? 0.7 : 1 // Làm mờ nhẹ nút bấm khi đang tải
+          }}
+        >
+          {/* Đổi chữ nếu đang lấy GPS */}
+          {isLoading ? "Đang định vị..." : "Khám Phá Bản Đồ"} 
+          {!isLoading && <span style={{ marginLeft: '10px' }}>→</span>}
         </button>
       </div>
     </div>

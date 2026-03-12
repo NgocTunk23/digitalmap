@@ -101,6 +101,7 @@ const MapView = () => {
   const currentArea = location.state?.areaData || "Khu vực Sun Plaza - Mường Hoa"; 
 
   const [routeSegments, setRouteSegments] = useState(null);
+  const [isRouting, setIsRouting] = useState(false); // THÊM DÒNG NÀY
 
   // HÀM: Đưa camera về lại vị trí hiện tại của user
   const handleReturnToMyLocation = () => {
