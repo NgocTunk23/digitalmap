@@ -190,11 +190,11 @@ const MapView = () => {
   const location = useLocation();
   const redMarkerRef = useRef(null);
   const mapRef = useRef(null); 
-  const myLocationCoords = useMemo(() => [22.3371665, 103.824208], []);
+  const [myLocationCoords, setMyLocationCoords] = useState([22.3371665, 103.824208]);
   const centerPosition = [22.303246, 103.777648];
   
-  const gpsInfo = location.state?.gpsInfo || "Đang xác định vị trí của bạn...";
-  const currentArea = location.state?.areaData || "Khu vực Mường Hoa"; 
+  const [gpsInfo, setGpsInfo] = useState(location.state?.gpsInfo || "Vị trí mặc định (Ga Mường Hoa)");
+  const [currentArea, setCurrentArea] = useState(location.state?.areaData || "Khu vực Mường Hoa");
 
   const [routeSegments, setRouteSegments] = useState(null);
   const [isRouting, setIsRouting] = useState(false); 
@@ -481,7 +481,7 @@ const filteredPlaces = useMemo(() => {
           </div>
           <div className="sidebar-content">
             
-            {/* ---- ĐÃ THAY BẰNG COMPONENT HIỂN THỊ LIST ẢNH TẠI ĐÂY ---- */}
+            {/* COMPONENT HIỂN THỊ LIST ẢNH */}
             <ImageCarousel images={selectedPlace.images} />
 
             <h2 className="place-name">{selectedPlace.name}</h2>
@@ -501,28 +501,58 @@ const filteredPlaces = useMemo(() => {
               </div>
             </div>
             
-            {/* NÚT CHỈ ĐƯỜNG MỚI BỔ SUNG LOADING */}
-            <button 
-              className="direction-btn" 
-              disabled={isRouting}
-              style={{ 
-                background: isRouting ? '#88aaff' : '#1d61ff', 
-                color: '#ffffff', border: 'none', padding: '12px 20px', 
-                borderRadius: '8px', cursor: isRouting ? 'wait' : 'pointer', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                width: '100%', marginTop: '15px', fontWeight: 'bold',
-                transition: 'all 0.3s'
-              }} 
-              onClick={() => {
-                if (!isRouting) {
-                  handleGetDirections();     
-                  handleGetCableCarLine();   
-                }
-              }}
-            >
-              <FiNavigation style={{ fontSize: '20px', marginRight: '10px' }} /> 
-              {isRouting ? 'Đang dò đường...' : 'Chỉ đường đến đây'}
-            </button>
+            {/* CỤM NÚT ĐIỀU HƯỚNG MỚI (Nằm ngang) */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '15px', width: '100%' }}>
+              
+              {/* NÚT 1: CHỌN LÀM ĐIỂM XUẤT PHÁT */}
+              <button 
+                style={{ 
+                  flex: 1, background: '#ffffff', color: '#ffffff', border: '1px solid #1d61ff', 
+                  padding: '12px 10px', borderRadius: '8px', cursor: 'pointer', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontWeight: 'bold', transition: 'all 0.3s', fontSize: '13px'
+                }} 
+                onClick={() => {
+                  const feature = fansipanData.features.find(f => f.properties.name === selectedPlace.name);
+                  if (feature) {
+                    // Cập nhật tọa độ, khu vực và tên của điểm xuất phát mới
+                    setMyLocationCoords([feature.geometry.coordinates[1], feature.geometry.coordinates[0]]);
+                    setCurrentArea(feature.properties.area);
+                    setGpsInfo(`Điểm xuất phát: ${selectedPlace.name}`);
+                    
+                    // Xóa đường vẽ cũ đi cho sạch bản đồ
+                    setRouteSegments(null); 
+                    setCableCarRoute(null);
+                  }
+                }}
+              >
+                <HiLocationMarker style={{ fontSize: '18px', marginRight: '5px' }} /> 
+                Xuất phát từ đây
+              </button>
+
+              {/* NÚT 2: CHỈ ĐƯỜNG ĐẾN ĐÂY */}
+              <button 
+                className="direction-btn" 
+                disabled={isRouting}
+                style={{ 
+                  flex: 1, background: isRouting ? '#88aaff' : '#1d61ff', 
+                  color: '#ffffff', border: 'none', padding: '12px 10px', 
+                  borderRadius: '8px', cursor: isRouting ? 'wait' : 'pointer', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                  fontWeight: 'bold', transition: 'all 0.3s', fontSize: '13px', margin: 0
+                }} 
+                onClick={() => {
+                  if (!isRouting) {
+                    handleGetDirections();     
+                    handleGetCableCarLine();   
+                  }
+                }}
+              >
+                <FiNavigation style={{ fontSize: '18px', marginRight: '5px' }} /> 
+                {isRouting ? 'Đang dò...' : 'Chỉ đường đến đây'}
+              </button>
+            </div>
+
           </div>
         </div>
       )}
