@@ -205,7 +205,7 @@
         "name": "Đỉnh Fansipan",
         "description": "\"Nóc nhà Đông Dương\" ở độ cao 3.143m. Đây là điểm check-in quan trọng nhất với các cột mốc đánh dấu cao độ. Từ đây, du khách có thể phóng tầm mắt ngắm nhìn toàn cảnh dãy Hoàng Liên Sơn và thung lũng Mường Hoa giữa biển mây bồng bềnh.",
         "area": "Khu vực Fansipan",
-        "images": ["images/dinhfansipan1.png", "images/dinhfansipan2.png"],
+        "images": ["images/dinhfansipan1.png", "images/dinhfansipan2.jpg"],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:00"]
       }
     },
@@ -294,7 +294,7 @@
         "name": "Miếu Sơn Thần",
         "description": "Miếu thờ thần núi với kiến trúc, đường nét trang trí của thời Trần. Núi tượng trưng cho chiều cao và vị trí trung tâm, gắn liền với các yếu tố linh thiêng vì đặc điểm cao, thẳng đứng và gần trời. Miếu Sơn Thần nhắc nhở mọi người trân trọng thiên nhiên, bảo vệ nguồn nước khoáng ngầm và gìn giữ tài nguyên cho thế hệ sau.",
         "area": "Khu vực Fansipan",
-        "images": ["images/mieusonthan1.jpg", "images/mieusonthan2.jpg"],
+        "images": ["images/mieusonthan1.jpg", "images/mieusonthan2.png"],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
       }
     },
@@ -344,7 +344,7 @@
         "name": "Ga tàu hỏa leo núi Mường Hoa",
         "description": "Ga Mường Hoa là ga đến của chuyến tàu Hỏa leo núi Mường Hoa, điểm trung chuyển du khách từ thị trấn lên cảnh tiên Fansipan. Đến Ga Mường Hoa vào tháng 5 - tháng 6, du khách sẽ tìm thấy ngay vườn hoa Rum nhất Sa Pa khỏe sắc qua ô cửa kính, vườn hoa nằm ngay hoàng ra ga, bên cạnh kiến ​​trúc cổ kính làm cho du khách như câu lạc bộ khung cảnh Paris hoa lệ giữa Sa Pa.",
         "area": "Khu vực Mường Hoa",
-        "images": ["images/gatauhoaleonuimuonghoa1.jpg", "images/gatauhoaleonuimuonghoa2.jpg"],
+        "images": ["images/gatauhoaleonuimuonghoa1.jpg", "images/gatauhoaleonuimuonghoa2.png"],
         "operating_hours": [
           "Thứ 2 - thứ 6: 08:15 - 18:00",
           "Thứ bảy - chủ nhật: 07:45 - 18:30"]
@@ -357,7 +357,7 @@
         "name": "Nhà hàng Sharia",
         "description": "Nhà hàng Sharia đánh dấu sự hiện diện của không gian ẩm thực Halal đầu tiên giữa đại ngàn Tây Bắc. Không chỉ là điểm dừng chân thưởng thức ẩm thực, Sharia mở ra một trải nghiệm lắng sâu - nơi hương vị Halal hòa quyện cùng thiên nhiên hùng vĩ và nhịp điệu tĩnh tại của quần thể văn hóa tâm linh Fansipan.",
         "area": "Khu vực Mường Hoa",
-        "images": ["images/nhahangsharia1.png", "images/nhahangsharia1.png"],
+        "images": ["images/nhahangsharia1.png", "images/nhahangsharia2.png"],
         "operating_hours": ["Mỗi ngày: 11:00 - 15:00"]
       }
     },
@@ -368,7 +368,7 @@
         "name": "Sapa Signature Inn",
         "description": "Nằm ở Sa Pa, cách Trạm cáp treo Fansipan 6.4 km, Sapa Signature Inn cung cấp chỗ nghỉ có khu vườn, chỗ đậu xe riêng miễn phí, phòng chờ chung và nhà hàng.",
         "area": "Khu vực Mường Hoa",
-        "images": ["images/sapasignatureinn1.png", "images/sapasignatureinn1.png"],
+        "images": ["images/sapasignatureinn1.png", "images/sapasignatureinn2.png"],
         "operating_hours": ["Mỗi ngày: Chưa có thông tin."]
       }
     },

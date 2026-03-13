@@ -18,8 +18,68 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
 
+// ==========================================
+// COMPONENT: BỘ SƯU TẬP ẢNH CÓ NÚT BẤM CHUYỂN (Nền nút trong suốt)
+// ==========================================
+const ImageCarousel = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Quan trọng: Khi người dùng chọn địa điểm khác, tự động reset về ảnh đầu tiên
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [images]);
 
+  if (!images || images.length === 0) {
+    return <img src="https://placehold.co/600x400?text=No+Image" alt="Không có ảnh" className="place-img" style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', marginBottom: '15px' }}/>;
+  }
+
+  const prevImage = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  return (
+    <div style={{ position: 'relative', width: '100%', marginBottom: '15px' }}>
+      <img 
+        src={images[currentIndex]} 
+        alt={`Ảnh ${currentIndex + 1}`} 
+        className="place-img" 
+        style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px', display: 'block' }}
+        onError={(e) => {e.target.src='https://placehold.co/600x400?text=No+Image'}}
+      />
+
+      {images.length > 1 && (
+        <>
+         {/* Nút TRÁI */}
+          <button 
+            className="carousel-btn carousel-btn-left" 
+            onClick={prevImage}
+          >
+            ❮
+          </button>
+
+          {/* Nút PHẢI */}
+          <button 
+            className="carousel-btn carousel-btn-right" 
+            onClick={nextImage}
+          >
+            ❯
+          </button>
+          <div style={{
+            position: 'absolute', bottom: '10px', right: '10px',
+            background: 'rgba(0, 0, 0, 0.6)', color: 'white', padding: '2px 8px',
+            borderRadius: '12px', fontSize: '12px', zIndex: 10
+          }}>
+            {currentIndex + 1} / {images.length}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 
 // Component vẽ đường OSRM nhận nhiều toạ độ điểm mù (waypoints)
@@ -129,8 +189,7 @@ const MapView = () => {
   const navigate = useNavigate(); 
   const location = useLocation();
   const redMarkerRef = useRef(null);
-  const mapRef = useRef(null); // THÊM DÒNG NÀY
-  //const [myLocationCoords, setMyLocationCoords] = useState([22.3371665, 103.824208]); // Vẫn giữ tọa độ mặc định phòng khi chưa load được GPSconst myLocationCoords = useMemo(() => [22.3371665, 103.824208], []);
+  const mapRef = useRef(null); 
   const myLocationCoords = useMemo(() => [22.3371665, 103.824208], []);
   const centerPosition = [22.303246, 103.777648];
   
@@ -138,41 +197,8 @@ const MapView = () => {
   const currentArea = location.state?.areaData || "Khu vực Mường Hoa"; 
 
   const [routeSegments, setRouteSegments] = useState(null);
-  const [isRouting, setIsRouting] = useState(false); // THÊM DÒNG NÀY
+  const [isRouting, setIsRouting] = useState(false); 
   const [cableCarRoute, setCableCarRoute] = useState(null);
-
-
-  //! HÀM NÀY ĐƯỢC BẬT VÀ SÀI ĐỂ LẤY VỊ TRÍ TRỰC TIẾP TỪ GPS VÀ CẬP NHẬT LIÊN TỤC THEO THỜI GIAN THỰC (REAL-TIME) TRÊN BẢN ĐỒ.
-  // useEffect(() => {
-  //   if (!navigator.geolocation) {
-  //     console.error("Trình duyệt của bạn không hỗ trợ định vị GPS.");
-  //     return;
-  //   }
-
-
-  //   const watchId = navigator.geolocation.watchPosition(
-  //     (position) => {
-  //   
-  //       const newCoords = [position.coords.latitude, position.coords.longitude];
-        
-  //   
-  //       setMyLocationCoords(newCoords);
-  //     },
-  //     (error) => {
-  //       console.error("Lỗi lấy vị trí liên tục: ", error);
-  //     },
-  //     {
-  //       enableHighAccuracy: true, // Bật chế độ chính xác cao nhất (Dùng GPS xịn)
-  //       maximumAge: 0,            // Không dùng dữ liệu cũ lưu trong bộ nhớ tạm
-  //       timeout: 10000            // Cập nhật nếu quá 10 giây không có phản hồi
-  //     }
-  //   );
-
-  //   // Khi người dùng thoát khỏi trang Map, phải tắt radar đi để đỡ tốn pin điện thoại
-  //   return () => {
-  //     navigator.geolocation.clearWatch(watchId);
-  //   };
-  // }, []); // Mảng rỗng [] giúp radar chỉ khởi động 1 lần duy nhất khi mở Map
 
   // HÀM: Đưa camera về lại vị trí hiện tại của user
   const handleReturnToMyLocation = () => {
@@ -205,7 +231,7 @@ const MapView = () => {
 
     const p_GaSapa = [22.334254, 103.840374];
     const p_GaMuongHoa = [22.336618, 103.825004];
-    const straightPointsSapa = [p_GaMuongHoa,[22.33486, 103.8308],  [22.3345, 103.832], [22.3339, 103.8338], [22.33319, 103.836], [22.33307, 103.837] ,[22.3331, 103.838], [22.33345, 103.839], [22.333797, 103.8399], [22.3340, 103.84028], p_GaSapa];// [22.334254, 103.840374]
+    const straightPointsSapa = [p_GaMuongHoa,[22.33486, 103.8308],  [22.3345, 103.832], [22.3339, 103.8338], [22.33319, 103.836], [22.33307, 103.837] ,[22.3331, 103.838], [22.33345, 103.839], [22.333797, 103.8399], [22.3340, 103.84028], p_GaSapa];
 
     const linesToDraw = []; // Mảng chứa các đường chim bay
 
@@ -269,30 +295,32 @@ const filteredPlaces = useMemo(() => {
     <GeoJSON data={fansipanData} onEachFeature={onEachFeature} />
   ), [onEachFeature]);
 
-  // HÀM XỬ LÝ CHỈ ĐƯỜNG MỚI: Tự động chèn Waypoint khi di chuyển liên khu vực
+  // XỬ LÝ CHỈ ĐƯỜNG (Có hiệu ứng Loading)
   const handleGetDirections = () => {
     if (!selectedPlace) return;
+    
+    setIsRouting(true); // Bật trạng thái Loading
 
     const feature = fansipanData.features.find(f => f.properties.name === selectedPlace.name);
-    if (!feature) return;
+    if (!feature) {
+        setIsRouting(false);
+        return;
+    }
 
     const destination = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
     const destinationArea = feature.properties.area;
     
-    // Toạ độ các trạm giao thông cố định (Gateways)
     const p_GaSapa = [22.334254, 103.840374];
     const p_GaMuongHoa = [22.336618, 103.825004];
     const p_GaHoangLien = [22.33707, 103.8243];
     const p_GaFansipan = [22.306694, 103.774694];
 
-  if (currentArea === destinationArea) {
-      // Cùng khu vực: Server tự xử lý từ A đến B
+    if (currentArea === destinationArea) {
       setRouteSegments([ [myLocationCoords, destination] ]);
     } else {
-      // Khác khu vực: Chia 2 chặng Server xử lý qua Trạm Trung Chuyển
       const segments = [];
       
-      // 1. XUẤT PHÁT TỪ: MƯỜNG HOA
+      // MƯỜNG HOA
       if (currentArea === "Khu vực Mường Hoa") {
         if (destinationArea === "Khu vực Fansipan") {
           segments.push([myLocationCoords, p_GaHoangLien]);
@@ -306,54 +334,46 @@ const filteredPlaces = useMemo(() => {
           }
         }
       } 
-      
-      // 2. XUẤT PHÁT TỪ: FANSIPAN
+      // FANSIPAN
       else if (currentArea === "Khu vực Fansipan") {
-        // Chặng 1: Từ vị trí hiện tại ra Ga Fansipan
         segments.push([myLocationCoords, p_GaFansipan]); 
-
         if (destinationArea === "Khu vực Mường Hoa") {
           if (selectedPlace.name !== "Ga Hoàng Liên") {
             segments.push([p_GaHoangLien, destination]);
           }
         } else if (destinationArea === "Khu vực Sun Plaza - Sapa") {
-          // THIẾU Ở ĐÂY ĐÃ ĐƯỢC THÊM: Đi bộ nối chuyến từ Hoàng Liên sang Mường Hoa
           segments.push([p_GaHoangLien, p_GaMuongHoa]);
-          
-          // Chặng cuối: Từ Ga Sapa về đích
           if (selectedPlace.name !== "Ga Sapa") {
             segments.push([p_GaSapa, destination]);
           }
         }
       }
-
-      // 3. XUẤT PHÁT TỪ: SAPA
+      // SAPA
       else if (currentArea === "Khu vực Sun Plaza - Sapa") {
-        // Chặng 1: Từ vị trí hiện tại ra Ga Sapa
         segments.push([myLocationCoords, p_GaSapa]);
-
         if (destinationArea === "Khu vực Mường Hoa") {
           if (selectedPlace.name !== "Ga Mường Hoa") {
             segments.push([p_GaMuongHoa, destination]);
           }
         } else if (destinationArea === "Khu vực Fansipan") {
-          // THIẾU Ở ĐÂY ĐÃ ĐƯỢC THÊM: Đi bộ nối chuyến từ Mường Hoa sang Hoàng Liên
           segments.push([p_GaMuongHoa, p_GaHoangLien]);
-          
-          // Chặng cuối: Từ Ga Fansipan lên đích
           if (selectedPlace.name !== "Ga Fansipan") {
             segments.push([p_GaFansipan, destination]);
           }
         }
       } 
-      
-      // Trường hợp dự phòng 
+      // DỰ PHÒNG 
       else {
         segments.push([myLocationCoords, destination]);
       }
 
       setRouteSegments(segments);
     }
+
+    // Tắt Loading sau 2.5s (Giả lập chờ server OSRM phản hồi)
+    setTimeout(() => {
+        setIsRouting(false);
+    }, 2500);
   };
 
   return (
@@ -363,12 +383,16 @@ const filteredPlaces = useMemo(() => {
       <div className="map-header" style={{ 
         position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 1000,
         background: 'white', display: 'flex', alignItems: 'center', 
-        justifyContent: 'center', padding: '15px 0', boxShadow: '0 2px 10px rgba(255, 255, 255, 0.1)' 
+        justifyContent: 'center', padding: '15px 0', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' 
       }}>
-        <button onClick={() => navigate('/')} style={{position: 'absolute', left: '20px', display: 'flex', alignItems: 'center', gap: '8px', background: 'white' , border: 'none', cursor: 'pointer', color: '#ffffff', fontFamily: '"Segoe UI", sans-serif', fontWeight: '600', fontSize: '16px' }}>
-          <FiHome style={{ fontSize: '20px' ,color: 'white'}} /> <span>Trang chủ </span>
+        {/* Nút Trang chủ đã được gắn class */}
+        <button className="home-btn" onClick={() => navigate('/')}>
+          <FiHome className="home-icon" /> <span>Trang chủ</span>
         </button>
-        <span style={{ fontWeight: '900', letterSpacing: '-1.5px', fontSize: '1.6rem', color: '#000000' }}>Sunworld Fansipan Legend</span>
+        
+        <span className="header-title" style={{ fontWeight: '900', letterSpacing: '-1.5px', fontSize: '1.6rem', color: '#000000' }}>
+          Sunworld Fansipan Legend
+        </span>
       </div>
 
      {/* THANH TÌM KIẾM */}
@@ -381,11 +405,9 @@ const filteredPlaces = useMemo(() => {
           type="text" 
           placeholder="Bạn muốn đến?" 
           value={searchTerm}
-          // Bấm vào thanh tìm kiếm là mở danh sách ra luôn
           onClick={() => setShowList(true)} 
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            // Gõ chữ là tự động mở danh sách để thấy kết quả lọc
             setShowList(true); 
           }}
         />
@@ -398,7 +420,7 @@ const filteredPlaces = useMemo(() => {
         {geoJsonLayer}
         <InitialFlyToUser coords={myLocationCoords} markerRef={redMarkerRef} />
 
-        {/* LOGIC VẼ ĐƯỜNG ĐÃ ĐƯỢC CHIA TRƯỜNG HỢP VÀ DÙNG OSRM */}
+        {/* LOGIC VẼ ĐƯỜNG */}
         {routeSegments && <RoutingMachine segments={routeSegments} />}
         <StraightLineMachine routes={cableCarRoute} />
         
@@ -418,7 +440,10 @@ const filteredPlaces = useMemo(() => {
       <div className={`location-list-sidebar ${showList ? 'open' : ''}`}>
         <div className="list-header">
           <h3>Danh sách địa điểm</h3>
-          <button onClick={() => setShowList(false)}><HiX /></button>
+          {/* Thêm class vào đây để dễ gọi CSS */}
+          <button className="close-list-btn" onClick={() => setShowList(false)}>
+            <HiX />
+          </button>
         </div>
         <div className="list-content">
           {filteredPlaces.map((place, index) => (
@@ -437,20 +462,15 @@ const filteredPlaces = useMemo(() => {
         </div>
       </div>
 
-      {/* NÚT VỀ VỊ TRÍ HIỆN TẠI (Góc dưới bên trái) */}
-      <button 
+      {/* <button 
         onClick={handleReturnToMyLocation}
         style={{
-          position: 'absolute',
-          bottom: '20px', // Cách đáy 40px
-          left: '20px',   // Cách trái 20px
-          zIndex: 1000   // Nổi lên trên bản đồ
+          position: 'absolute', bottom: '20px', left: '20px', zIndex: 1000 
         }}
         title="Vị trí của tôi"
       >
-        {/* Xoay icon 45 độ để thành hình mũi tên định vị GPS */}
        <HiLocationMarker style={{ color: '#ffffff', fontSize: '24px' }} className="icon-item-react" />
-      </button>
+      </button> */}
 
       {/* SIDEBAR THÔNG TIN CHI TIẾT */}
       {selectedPlace && !showList && (
@@ -460,7 +480,10 @@ const filteredPlaces = useMemo(() => {
             <button className="close-btn" onClick={() => setSelectedPlace(null)}>✕</button>
           </div>
           <div className="sidebar-content">
-            <img src={selectedPlace.images[0]} alt={selectedPlace.name} className="place-img" onError={(e) => {e.target.src='https://placehold.co/600x400?text=No+Image'}} />
+            
+            {/* ---- ĐÃ THAY BẰNG COMPONENT HIỂN THỊ LIST ẢNH TẠI ĐÂY ---- */}
+            <ImageCarousel images={selectedPlace.images} />
+
             <h2 className="place-name">{selectedPlace.name}</h2>
             <span className="area-badge">{selectedPlace.area}</span>
             <div className="info-card">
@@ -478,13 +501,27 @@ const filteredPlaces = useMemo(() => {
               </div>
             </div>
             
-            <button className="direction-btn" style={{ background: '#1d61ff', color: '#ffffff', border: 'none', padding: '12px 20px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', marginTop: '15px', fontWeight: 'bold' }} 
-                            onClick={() => {
-                  handleGetDirections();     // Tiến trình 1: Server dò đường
-                  handleGetCableCarLine();   // Tiến trình 2: Chim bay cáp treo
-                }}
+            {/* NÚT CHỈ ĐƯỜNG MỚI BỔ SUNG LOADING */}
+            <button 
+              className="direction-btn" 
+              disabled={isRouting}
+              style={{ 
+                background: isRouting ? '#88aaff' : '#1d61ff', 
+                color: '#ffffff', border: 'none', padding: '12px 20px', 
+                borderRadius: '8px', cursor: isRouting ? 'wait' : 'pointer', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                width: '100%', marginTop: '15px', fontWeight: 'bold',
+                transition: 'all 0.3s'
+              }} 
+              onClick={() => {
+                if (!isRouting) {
+                  handleGetDirections();     
+                  handleGetCableCarLine();   
+                }
+              }}
             >
-              <FiNavigation style={{ fontSize: '20px', marginRight: '10px' }} /> Chỉ đường đến đây
+              <FiNavigation style={{ fontSize: '20px', marginRight: '10px' }} /> 
+              {isRouting ? 'Đang dò đường...' : 'Chỉ đường đến đây'}
             </button>
           </div>
         </div>

@@ -77,40 +77,31 @@ p, span, .area-badge {
 .direction-btn:hover { background: #004ae6; transform: translateY(-2px); }
 
 
+/* ==========================================
+   CSS NÚT X ĐÓNG THÔNG TIN CHI TIẾT (TRONG SUỐT)
+   ========================================== */
 .close-btn {
-  /* 1. Kích thước nhỏ gọn */
-  width: 32px; 
-  height: 32px;
-  
-  /* 2. Màu sắc giống ảnh mẫu Toon gửi */
-  background-color: #1d61ff; /* Màu xanh thương hiệu */
-  color: white;              /* Chữ X màu trắng */
-  
-  /* 3. Căn giữa chữ X tuyệt đối */
+  width: 36px; 
+  height: 36px;
+  background: transparent !important; /* Bí quyết: Xóa sạch cái nền màu xanh */
+  color: #555;                        /* Đổi dấu X thành màu xám đậm cho nổi trên nền trắng */
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* 4. Bo góc và bỏ viền */
-  border: none;
-  border-radius: 8px;        /* Bo góc hơi tròn cho mượt */
-  
-  /* 5. Cỡ chữ X nhỏ lại */
-  font-size: 14px;
-  font-weight: 900 !important; /* Dùng Segoe UI Semibold như Toon muốn */
-  
+  border: none !important;
+  outline: none !important;
+  font-size: 24px;                    /* Cho cái X to ra một xíu để ngón tay dễ bấm */
+  font-weight: 900 !important; 
   cursor: pointer;
-  padding: 0;                /* Xóa padding để không bị đẩy lệch */
+  padding: 0;                
   transition: all 0.2s ease;
-  
-  /* Đẩy nút sang phải trong Sidebar */
   margin-left: auto;
 }
 
-/* Hiệu ứng khi di chuột vào */
 .close-btn:hover {
-  background-color: #0056ff;
-  transform: scale(0.9);      /* Thu nhỏ nhẹ khi hover nhìn rất xịn */
+  background: transparent !important; /* Hover vào vẫn giữ trong suốt */
+  color: #ff4d4f;                     /* Đổi sang màu đỏ báo hiệu nút Hủy cực ngầu */
+  transform: scale(1.1);              /* Phóng to lên xíu xiu */
 }
 
 
@@ -210,3 +201,164 @@ p, span, .area-badge {
 }
 
 
+/* ==========================================
+   CSS CHO NÚT CHUYỂN ẢNH TRONG SUỐT
+   ========================================== */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  /* BÍ QUYẾT TRONG SUỐT TUYỆT ĐỐI */
+  background: transparent !important; /* Ép buộc trong suốt, chống bị đè CSS */
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important; /* Xóa viền xanh khi click */
+  box-shadow: none !important; /* Xóa mọi loại bóng đổ của nút */
+  
+  color: white; /* Màu mũi tên */
+  font-size: 28px; /* Cho mũi tên to ra một tí nhìn cho sang */
+  font-weight: 300; /* Cho nét mũi tên thanh mảnh lại */
+  
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  
+  /* Tạo bóng đen nhẹ ngay sát chữ để không bị chìm khi nền ảnh màu trắng */
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.8), 0px 0px 10px rgba(0, 0, 0, 0.5);
+  
+  /* Hiệu ứng chuyển động mượt mà khi hover */
+  transition: all 0.2s ease;
+}
+
+/* Hiệu ứng khi di chuột vào mũi tên (Chỉ phóng to chữ lên, vẫn trong suốt) */
+.carousel-btn:hover {
+  transform: translateY(-50%) scale(1.2); /* Phóng to mũi tên lên 1.2 lần */
+  text-shadow: 0px 2px 8px rgba(0, 0, 0, 1), 0px 0px 15px rgba(255, 255, 255, 0.5); /* Sáng lên tí */
+}
+
+.carousel-btn-left {
+  left: 5px; /* Cách mép trái ảnh 5px */
+}
+
+.carousel-btn-right {
+  right: 5px; /* Cách mép phải ảnh 5px */
+}
+
+
+/* ==========================================
+   CSS NÚT TRANG CHỦ (TRONG SUỐT BÁ ĐẠO)
+   ========================================== */
+.home-btn {
+  position: absolute;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  /* Nền trong suốt 100% */
+  background: transparent !important; 
+  border: none;
+  cursor: pointer;
+  
+  /* Đổi chữ và icon sang màu đen hoặc xanh cho nổi trên nền trắng */
+  color: #1a2b49; 
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 5px;
+  transition: all 0.2s ease;
+}
+
+.home-btn .home-icon {
+  font-size: 20px;
+  color: #1d61ff; /* Cho cái icon ngôi nhà màu xanh xíu cho đẹp */
+}
+
+/* Hiệu ứng khi bấm/hover */
+.home-btn:hover {
+  transform: scale(0.95);
+  opacity: 0.7;
+}
+
+/* ==========================================
+   GIAO DIỆN RIÊNG CHO ĐIỆN THOẠI
+   ========================================== */
+@media (max-width: 768px) {
+  .home-btn {
+    left: 10px;
+    gap: 4px;
+    font-size: 14px; /* Chữ nhỏ lại */
+  }
+  
+  .home-btn .home-icon {
+    font-size: 22px; /* Icon to ra xíu để dễ bấm */
+  }
+
+  /* Tùy chọn cực xịn: Ẩn luôn chữ Trang chủ đi cho thoáng, chỉ chừa lại icon ngôi nhà */
+  .home-btn span {
+    display: none; 
+  }
+
+  /* Ép cái tiêu đề nhỏ lại một tí cho khỏi bị rớt dòng */
+  .header-title {
+    font-size: 1.2rem !important; 
+  }
+}
+
+
+
+
+
+
+/* ==========================================
+   CSS NÚT ĐÓNG DANH SÁCH (TRONG SUỐT)
+   ========================================== */
+.close-list-btn {
+  background: transparent !important; /* Xóa sạch nền */
+  border: none !important;            /* Xóa viền */
+  outline: none !important;
+  color: #555;                        /* Màu xám xám cho sang */
+  font-size: 26px;                    /* Icon to ra một xíu */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;                       /* Tăng vùng bấm (hitbox) */
+  margin-right: -8px;                 /* Bù trừ margin để X sát lề phải */
+  transition: all 0.2s ease;
+}
+
+.close-list-btn:hover {
+  color: #ff4d4f; /* Di chuột vào đổi màu đỏ cực xịn */
+  transform: scale(1.1);
+}
+
+/* ==========================================
+   FIX SIDEBAR DANH SÁCH TRÊN ĐIỆN THOẠI
+   ========================================== */
+@media (max-width: 768px) {
+  /* Trên điện thoại, cho cái bảng danh sách full màn hình luôn cho dễ vuốt */
+  .location-list-sidebar {
+    width: 100% !important; 
+    right: -100%; /* Giấu hẳn sang phải */
+  }
+  
+  .location-list-sidebar.open {
+    right: 0;
+  }
+
+  .close-list-btn {
+    font-size: 30px; /* Điện thoại ngón tay to, cho icon bự lên xíu nữa */
+    padding: 10px;
+  }
+  
+  /* Chữ "Danh sách địa điểm" nhỏ lại tí cho cân đối */
+  .list-header h3 {
+    font-size: 18px;
+  }
+}
