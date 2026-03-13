@@ -164,7 +164,7 @@ const InitialFlyToUser = ({ coords, markerRef }) => {
   const map = useMap();
   useEffect(() => {
     if (coords && markerRef.current) {
-      map.flyTo(coords, 18, { duration: 1, easeLinearity: 1 });
+      map.flyTo(coords, 18, { duration: 0.25, easeLinearity: 1 });
       const timer = setTimeout(() => { markerRef.current.openPopup(); }, 1500); 
       return () => clearTimeout(timer);
     }
@@ -186,6 +186,7 @@ const MapView = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [showList, setShowList] = useState(false); 
   const [searchTerm, setSearchTerm] = useState(""); 
+  const [showDropdown, setShowDropdown] = useState(false); // THÊM DÒNG NÀY: Công tắc bật/tắt bảng tìm kiếm nhỏ
   const navigate = useNavigate(); 
   const location = useLocation();
   const redMarkerRef = useRef(null);
@@ -200,15 +201,19 @@ const MapView = () => {
   const [isRouting, setIsRouting] = useState(false); 
   const [cableCarRoute, setCableCarRoute] = useState(null);
 
-  // HÀM: Đưa camera về lại vị trí hiện tại của user
+// HÀM: Đưa camera về lại vị trí xuất phát (hoặc vị trí GPS hiện tại)
   const handleReturnToMyLocation = () => {
     if (mapRef.current) {
       mapRef.current.stop(); // Dừng mọi animation đang có
       
-      // Bay về vị trí hiện tại
+      // 1. Dọn dẹp màn hình: Đóng bảng thông tin và danh sách nếu đang mở
+      setSelectedPlace(null);
+      setShowList(false);
+      
+      // 2. Bay về vị trí xuất phát (tọa độ này luôn là mới nhất nhờ State)
       mapRef.current.flyTo(myLocationCoords, 18, { duration: 1.2 });
       
-      // Mở lại popup vị trí
+      // 3. Tự động bật cái biển báo (Popup) màu đỏ lên
       setTimeout(() => {
         if (redMarkerRef.current) {
           redMarkerRef.current.openPopup();
@@ -395,23 +400,64 @@ const filteredPlaces = useMemo(() => {
         </span>
       </div>
 
-     {/* THANH TÌM KIẾM */}
-      <div className="floating-search-bar">
-        <button className="menu-icon-btn" onClick={() => setShowList(true)} style={{ background: 'none', border: 'none' }}>
-          <HiMenu style={{ color: 'black', fontSize: '24px' }} />
-        </button>
-        <div className="search-divider" />
-        <input 
-          type="text" 
-          placeholder="Bạn muốn đến?" 
-          value={searchTerm}
-          onClick={() => setShowList(true)} 
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setShowList(true); 
-          }}
-        />
-        <HiSearch className="search-icon-right" />
+     {/* ==========================================
+          KHU VỰC TÌM KIẾM VÀ MENU RỚT (DROPDOWN)
+          ========================================== */}
+      <div className="search-wrapper">
+        <div className="floating-search-bar">
+          
+          {/* Nút 3 gạch: Giữ nguyên chức năng mở Sidebar to */}
+          <button className="menu-icon-btn" onClick={() => setShowList(true)} style={{ background: 'none', border: 'none' }}>
+            <HiMenu style={{ color: 'black', fontSize: '24px' }} />
+          </button>
+          
+          <div className="search-divider" />
+          
+          {/* Ô nhập liệu: Chỉ mở bảng nhỏ (dropdown), tắt bảng to */}
+          <input 
+            type="text" 
+            placeholder="Bạn muốn đến?" 
+            value={searchTerm}
+            onFocus={() => { if(searchTerm) setShowDropdown(true); }} 
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setShowDropdown(true); // Bật menu rớt
+              setShowList(false);    // Tắt bảng sidebar to đi
+            }}
+          />
+          
+          {/* Nếu đang có chữ thì hiện nút X màu đỏ để xóa nhanh, không thì hiện kính lúp */}
+          {searchTerm ? (
+            <HiX className="search-icon-right" style={{ cursor: 'pointer', color: '#ff4d4f' }} onClick={() => { setSearchTerm(''); setShowDropdown(false); }} />
+          ) : (
+            <HiSearch className="search-icon-right" />
+          )}
+        </div>
+
+        {/* BẢNG DROPDOWN MENU KẾT QUẢ TÌM KIẾM (Chỉ hiện khi gõ chữ) */}
+        {showDropdown && searchTerm && (
+          <div className="search-dropdown">
+            {filteredPlaces.length > 0 ? (
+              filteredPlaces.map((place, index) => (
+                <div key={index} className="dropdown-item" onClick={() => {
+                  setSelectedPlace(place.properties);
+                  setShowDropdown(false); // Đóng menu rớt
+                  setSearchTerm('');      // Xóa sạch chữ vừa gõ
+                  setRouteSegments(null); // Xóa đường đi cũ
+                  setCableCarRoute(null);
+                }}>
+                  <HiLocationMarker className="dropdown-icon" />
+                  <div className="dropdown-info">
+                    <strong>{place.properties.name}</strong>
+                    <span>{place.properties.area}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="dropdown-empty">Không tìm thấy địa điểm "{searchTerm}"</div>
+            )}
+          </div>
+        )}
       </div>
 
       <MapContainer ref={mapRef} center={centerPosition} zoom={15} zoomControl={false} style={{ height: '100%', width: '100%' }}>
@@ -462,15 +508,13 @@ const filteredPlaces = useMemo(() => {
         </div>
       </div>
 
-      {/* <button 
+      <button 
+        className="my-location-btn"
         onClick={handleReturnToMyLocation}
-        style={{
-          position: 'absolute', bottom: '20px', left: '20px', zIndex: 1000 
-        }}
         title="Vị trí của tôi"
       >
-       <HiLocationMarker style={{ color: '#ffffff', fontSize: '24px' }} className="icon-item-react" />
-      </button> */}
+       <HiLocationMarker className="my-location-icon" />
+      </button>
 
       {/* SIDEBAR THÔNG TIN CHI TIẾT */}
       {selectedPlace && !showList && (
@@ -515,14 +559,18 @@ const filteredPlaces = useMemo(() => {
                 onClick={() => {
                   const feature = fansipanData.features.find(f => f.properties.name === selectedPlace.name);
                   if (feature) {
-                    // Cập nhật tọa độ, khu vực và tên của điểm xuất phát mới
+                    // 1. Cập nhật tọa độ và thông tin ngay lập tức
                     setMyLocationCoords([feature.geometry.coordinates[1], feature.geometry.coordinates[0]]);
                     setCurrentArea(feature.properties.area);
                     setGpsInfo(`Điểm xuất phát: ${selectedPlace.name}`);
                     
-                    // Xóa đường vẽ cũ đi cho sạch bản đồ
                     setRouteSegments(null); 
                     setCableCarRoute(null);
+                    
+                    // 2. BÍ QUYẾT CHỐNG RUNG MAP: Đợi 0.3 giây (300ms) để map bắt đầu bay rồi mới đóng bảng thông tin
+                    setTimeout(() => {
+                      setSelectedPlace(null);
+                    }, 300);
                   }
                 }}
               >
@@ -545,6 +593,9 @@ const filteredPlaces = useMemo(() => {
                   if (!isRouting) {
                     handleGetDirections();     
                     handleGetCableCarLine();   
+                    setTimeout(() => {
+                      setSelectedPlace(null);
+                    },3000);
                   }
                 }}
               >
