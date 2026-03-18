@@ -17,7 +17,8 @@ import { MdTurnRight } from 'react-icons/md';
 import { BiCheckDouble } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 
-
+import fansipanPaths from "./data/fansipan-paths.json";
+import { Polyline } from "react-leaflet";
 
 
 
@@ -31,6 +32,126 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
+const getPathLength = (coords) => {
+  let total = 0;
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p1 = coords[i];
+    const p2 = coords[i + 1];
+    total += calculateDistance(p1[1], p1[0], p2[1], p2[0]);
+  }
+  return total;
+};
+
+const findShortestPath = (startNode, endNode) => {
+  if (!startNode || !endNode || startNode === endNode) return null;
+  let distances = {};
+  let prev = {};
+  let nodes = new Set();
+  let segmentsData = {};
+
+  fansipanPaths.features.forEach((f) => {
+    const { from, to, isTrain } = f.properties;
+    const coords = f.geometry.coordinates;
+    const weight = getPathLength(coords);
+
+    if (!distances[from]) distances[from] = Infinity;
+    if (!distances[to]) distances[to] = Infinity;
+    nodes.add(from);
+    nodes.add(to);
+
+    if (!segmentsData[from]) segmentsData[from] = [];
+    segmentsData[from].push({ to, weight, coords, isTrain });
+    if (!segmentsData[to]) segmentsData[to] = [];
+    segmentsData[to].push({
+      to: from,
+      weight,
+      coords,
+      isTrain: isTrain || false,
+      reverse: true,
+    });
+  });
+
+  if (!nodes.has(startNode) || !nodes.has(endNode)) return null;
+
+  distances[startNode] = 0;
+  let pq = [startNode];
+
+  while (pq.length > 0) {
+    pq.sort((a, b) => distances[a] - distances[b]);
+    let u = pq.shift();
+    if (u === endNode) break;
+
+    (segmentsData[u] || []).forEach((edge) => {
+      let alt = distances[u] + edge.weight;
+      if (alt < distances[edge.to]) {
+        distances[edge.to] = alt;
+        prev[edge.to] = {
+          from: u,
+          coords: edge.coords,
+          isTrain: edge.isTrain,
+          reverse: edge.reverse,
+        };
+        if (!pq.includes(edge.to)) pq.push(edge.to);
+      }
+    });
+  }
+
+  let resultSegments = [];
+  let curr = endNode;
+  while (prev[curr]) {
+    let edge = prev[curr];
+    let finalCoords = edge.coords.map((c) => [c[1], c[0]]);
+    if (edge.reverse) finalCoords.reverse();
+    resultSegments.unshift({
+      coords: finalCoords,
+      isTrain: edge.isTrain || false,
+    });
+    curr = edge.from;
+  }
+  return resultSegments.length > 0 ? { segments: resultSegments } : null;
+};
+
+
+
+
+
+
+
+
+
+
+
 
 // ==========================================
 // COMPONENT: BỘ SƯU TẬP ẢNH CÓ NÚT BẤM CHUYỂN (Nền nút trong suốt)
@@ -236,6 +357,7 @@ const MapView = () => {
   const [showRouteDetails, setShowRouteDetails] = useState(false);
   const [routeSteps, setRouteSteps] = useState([]); // State chứa danh sách các bước
   const [routeSummary, setRouteSummary] = useState({ dist: '0m', time: '0 phút' }); // State chứa tổng quan
+  const [walkRoute, setWalkRoute] = useState(null);
 
 
 
@@ -246,7 +368,13 @@ const MapView = () => {
   const totalDist = allSegmentsData.reduce((sum, seg) => sum + (seg?.distance || 0), 0);
   const totalTime = allSegmentsData.reduce((sum, seg) => sum + (seg?.time || 0), 0);
   
-  setRouteSummary({ dist: formatDist(totalDist), time: formatTime(totalTime) });
+  // --- BẮT ĐẦU CHỈNH SỬA: Nếu d=0 và t=0 (do mảng rỗng trên Fansipan) thì mới set '--' ---
+    if (totalDist === 0 && totalTime === 0) {
+      setRouteSummary({ dist: '--', time: '--' });
+    } else {
+      setRouteSummary({ dist: formatDist(totalDist), time: formatTime(totalTime) });
+    }
+  // --- KẾT THÚC CHỈNH SỬA ---
 
   setRouteSteps(prevSteps => {
     return prevSteps.map(step => {
@@ -258,7 +386,7 @@ const MapView = () => {
           if (segmentData.distance === 0) {
             return {
               ...step,
-              dist: 'Không tính toán được tuyến đường đi bộ' // Ghi đè mô tả để user hiểu
+              dist: '--' // Ghi đè mô tả để user hiểu
             };
           }
 
@@ -297,11 +425,15 @@ const MapView = () => {
   if (isCrossComplex) {
     // Chặng đi bộ 1: Ra ga đầu
     if (!isStartAtStation) {
+      // --- BẮT ĐẦU CHỈNH SỬA (Chặn tính đường bộ TỪ khu vực Fansipan ra Ga) ---
+      const isWalkingInFansipan = startArea === "Khu vực Fansipan";
       steps.push({ 
         id: stepId++, type: 'walking', icon: <FaWalking />, 
-        title: 'Đi bộ đến', desc: (startArea === "Khu vực Sun Plaza - Sapa")?'Ga Sapa':'Ga Fansipan',
-        dist: '...', serverIdx: currentServerIdx // Đánh dấu lấy index 0
+        title: 'Đi bộ đến', desc: (startArea === "Khu vực Sun Plaza - Sapa") ? 'Ga Sapa' : 'Ga Fansipan',
+        dist: isWalkingInFansipan ? 'Đường bậc thang' : '...', // Hiện chữ thay vì ...
+        serverIdx: isWalkingInFansipan ? null : currentServerIdx // Note: Gán null để bỏ qua server
       });
+      // --- KẾT THÚC CHỈNH SỬA ---
     }
     currentServerIdx++; // QUAN TRỌNG: Dù có push vào UI hay không, index của server vẫn tăng
 
@@ -315,7 +447,7 @@ const MapView = () => {
     steps.push({ 
       id: stepId++, type: 'walking', icon: <FaWalking />, 
       title: 'Đi bộ đến', desc: (startArea === "Khu vực Sun Plaza - Sapa")? 'Ga Hoàng Liên': 'Ga Mường Hoa', 
-      dist: '...', serverIdx: currentServerIdx // Đánh dấu lấy index tiếp theo
+      dist: '...', serverIdx: currentServerIdx 
     });
     currentServerIdx++;
 
@@ -330,13 +462,17 @@ const MapView = () => {
   // 3. TRƯỜNG HỢP 1 CHẶNG CÁP
   else if (!isSameArea) {
     if (!isStartAtStation) {
+      // --- BẮT ĐẦU CHỈNH SỬA (Chặn tính đường bộ TỪ khu vực Fansipan ra Ga) ---
+      const isWalkingInFansipan = startArea === "Khu vực Fansipan";
       steps.push({ 
         id: stepId++, type: 'walking', icon: <FaWalking />, 
         title: 'Đi bộ ra ga', desc: `Tại ${startArea}`, 
-        dist: '...', serverIdx: currentServerIdx 
+        dist: isWalkingInFansipan ? 'Đường bậc thang' : '...', 
+        serverIdx: isWalkingInFansipan ? null : currentServerIdx 
       });
+      // --- KẾT THÚC CHỈNH SỬA ---
     }
-    currentServerIdx++; // Tăng index để dành chỗ cho chặng đầu (dù là 0m)
+    currentServerIdx++; 
 
     steps.push({ id: stepId++, icon: <MdTurnRight />,
       title: (startArea === "Khu vực Sun Plaza - Sapa" || endArea=== "Khu vực Sun Plaza - Sapa")?'Tàu hỏa leo núi':'Tuyến cáp treo', 
@@ -347,20 +483,37 @@ const MapView = () => {
 
   // 4. CHẶNG CUỐI: Đi bộ đến đích
   const isAtGoal = isEndAtStation && !isSameArea;
-  steps.push({ 
-    id: stepId++, 
-    type: 'walking', 
-    icon: <BiCheckDouble />, 
-    title: isAtGoal ?destination.name:'Đi bộ đến', 
-    desc: isAtGoal ?destination.area:destination.name, 
-    dist: isAtGoal ? 'Tại ga' : '...',
-    // Nếu không phải "Tại ga", dùng index hiện tại của server
-    serverIdx: isAtGoal ? null : currentServerIdx 
-  });
+  
+  // --- BẮT ĐẦU CHỈNH SỬA (Kiểm tra đích đến có nằm trong Fansipan không) ---
+  const isEndInFansipan = endArea === "Khu vực Fansipan";
+
+  if (isEndInFansipan && !isAtGoal) {
+    // Rơi vào case: (Fansipan -> Fansipan) HOẶC (Nơi khác tới Ga Fansipan -> Điểm ở Fansipan)
+    steps.push({ 
+      id: stepId++, 
+      type: 'walking', 
+      icon: <BiCheckDouble />, 
+      title: 'Tham quan', 
+      desc: destination.name, 
+      dist: 'Đường đi bộ trên đỉnh núi', // Text tĩnh
+      serverIdx: null // Note: Gán null để không lấy dữ liệu API tính toán nét vẽ
+    });
+  } else {
+    // Trường hợp bình thường ở các khu vực khác
+    steps.push({ 
+      id: stepId++, 
+      type: 'walking', 
+      icon: <BiCheckDouble />, 
+      title: isAtGoal ? destination.name : 'Đi bộ đến', 
+      desc: isAtGoal ? destination.area : destination.name, 
+      dist: isAtGoal ? 'Tại ga' : '...',
+      serverIdx: isAtGoal ? null : currentServerIdx 
+    });
+  }
+  // --- KẾT THÚC CHỈNH SỬA ---
 
   setRouteSteps(steps);
 };
-
 
 // HÀM: Đưa camera về lại vị trí xuất phát (hoặc vị trí GPS hiện tại)
   const handleReturnToMyLocation = () => {
@@ -392,7 +545,7 @@ const MapView = () => {
 
     // Toạ độ đường cáp treo Fansipan (Ga Hoàng Liên - Ga Fansipan)
     const p_GaHoangLien = [22.3370, 103.824194];
-    const p_GaFansipan = [22.30655, 103.774694];
+    const p_GaFansipan = [22.306607549827092, 103.77477934814624];
     const straightPoints = [p_GaHoangLien, p_GaFansipan];
 
     const p_GaSapa = [22.334254, 103.840374];
@@ -466,6 +619,9 @@ const filteredPlaces = useMemo(() => {
     if (!selectedPlace) return;
     
     setIsRouting(true); // Bật trạng thái Loading
+    // Clear các đường nét cũ
+    setRouteSegments(null); 
+    setWalkRoute(null);     // --- MỚI CHÈN ---
 
     const feature = fansipanData.features.find(f => f.properties.name === selectedPlace.name);
     if (!feature) {
@@ -475,24 +631,45 @@ const filteredPlaces = useMemo(() => {
 
     const destination = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
     const destinationArea = feature.properties.area;
+
+    // --- MỚI CHÈN: Xử lý tên node để khớp với file JSON chứa tọa độ Fansipan ---
+    const startNodeName = gpsInfo
+      .replace("Điểm xuất phát: ", "")
+      .replace("Vị trí mặc định (", "")
+      .replace(")", "")
+      .trim();
+    const endNodeName = selectedPlace.name;
+    // ------------------------------------------------------------------------
     
     const p_GaSapa = [22.334254, 103.840374];
     const p_GaMuongHoa = [22.336618, 103.825004];
     const p_GaHoangLien = [22.33707, 103.8243];
-    const p_GaFansipan = [22.306694, 103.774694];
+    const p_GaFansipan = [22.306607549827092, 103.77477934814624];
 
+    let segments = [];
+
+    // TRƯỜNG HỢP: ĐI LẠI TRONG CÙNG 1 KHU VỰC
     if (currentArea === destinationArea) {
-      setRouteSegments([ [myLocationCoords, destination] ]);
-    } else {
-      const segments = [];
-      
+      if (currentArea === "Khu vực Fansipan") {
+        // --- MỚI CHÈN: Vẽ đường đi bộ trên đỉnh núi (Fansipan -> Fansipan) ---
+        const pathResult = findShortestPath(startNodeName, endNodeName);
+        setWalkRoute(pathResult); 
+        segments = []; // Ép mảng rỗng để không gọi OSRM vẽ đè
+        // ---------------------------------------------------------------------
+      } else {
+        segments.push([myLocationCoords, destination]);
+      }
+    } 
+    // TRƯỜNG HỢP: ĐI XUYÊN KHU VỰC
+    else {
       // MƯỜNG HOA
       if (currentArea === "Khu vực Mường Hoa") {
         if (destinationArea === "Khu vực Fansipan") {
           segments.push([myLocationCoords, p_GaHoangLien]);
-          if (selectedPlace.name !== "Ga Fansipan") {
-            segments.push([p_GaFansipan, destination]);
-          }
+          // --- MỚI CHÈN: Vẽ đi bộ từ Ga Fansipan đến đích (Phố -> Núi) ---
+          const pathResult = findShortestPath("Ga Fansipan", endNodeName);
+          setWalkRoute(pathResult);
+          // ---------------------------------------------------------------
         } else if (destinationArea === "Khu vực Sun Plaza - Sapa") {
           segments.push([myLocationCoords, p_GaMuongHoa]);
           if (selectedPlace.name !== "Ga Sapa") {
@@ -502,7 +679,11 @@ const filteredPlaces = useMemo(() => {
       } 
       // FANSIPAN
       else if (currentArea === "Khu vực Fansipan") {
-        segments.push([myLocationCoords, p_GaFansipan]); 
+        // --- MỚI CHÈN: Vẽ đi bộ từ điểm hiện tại ra Ga Fansipan (Núi -> Phố) ---
+        const pathResult = findShortestPath(startNodeName, "Ga Fansipan");
+        setWalkRoute(pathResult);
+        // -----------------------------------------------------------------------
+        
         if (destinationArea === "Khu vực Mường Hoa") {
           if (selectedPlace.name !== "Ga Hoàng Liên") {
             segments.push([p_GaHoangLien, destination]);
@@ -523,25 +704,42 @@ const filteredPlaces = useMemo(() => {
           }
         } else if (destinationArea === "Khu vực Fansipan") {
           segments.push([p_GaMuongHoa, p_GaHoangLien]);
-          if (selectedPlace.name !== "Ga Fansipan") {
-            segments.push([p_GaFansipan, destination]);
-          }
+          // --- MỚI CHÈN: Vẽ đi bộ từ Ga Fansipan đến đích (Phố -> Núi) ---
+          const pathResult = findShortestPath("Ga Fansipan", endNodeName);
+          setWalkRoute(pathResult);
+          // ---------------------------------------------------------------
         }
       } 
       // DỰ PHÒNG 
       else {
         segments.push([myLocationCoords, destination]);
       }
-
-      setRouteSegments(segments);
     }
 
-    // // Tắt Loading sau 2.5s (Giả lập chờ server OSRM phản hồi)
-    // setTimeout(() => {
-    //     setIsRouting(false);
-    // }, 2500);
+    // Gán dữ liệu để render ra map OSRM cho phần đường phố
+    setRouteSegments(segments);
+
+    // FIX LỖI KẸT LOADING: 
+    if (segments.length === 0) {
+      setTimeout(() => {
+        handleRouteCalculated([]);
+      }, 300); // Đợi 1 chút cho mượt UI
+    }
   };
 
+  // --- THÊM ĐOẠN NÀY ĐỂ KIỂM TRA GHI CHÚ THỜI GIAN ĐI DẠO ---
+  // 1. Kiểm tra xem điểm đó có nằm ở dưới phố không (Sapa, Mường Hoa)
+  const isStartBelow = currentArea !== "Khu vực Fansipan";
+  const isEndBelow = selectedPlace?.area !== "Khu vực Fansipan";
+
+  // 2. Kiểm tra xem điểm đó có nằm sâu trong đỉnh núi không (Phải thuộc Fansipan VÀ Không phải Ga)
+  const isStartDeepInPeak = currentArea === "Khu vực Fansipan" && !gpsInfo.includes("Ga Fansipan");
+  const isEndDeepInPeak = selectedPlace?.area === "Khu vực Fansipan" && selectedPlace?.name !== "Ga Fansipan";
+
+  // 3. CHỐT LOGIC: Chỉ hiện ghi chú khi đi từ Dưới Phố <-> Sâu Trong Đỉnh
+  const showWalkingNote = (isStartBelow && isEndDeepInPeak) || (isStartDeepInPeak && isEndBelow);
+  // ---------------------------------------------------------
+  
   return (
     <div className="map-wrapper" style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       
@@ -630,6 +828,21 @@ const filteredPlaces = useMemo(() => {
         {/* LOGIC VẼ ĐƯỜNG */}
         {routeSegments && <RoutingMachine segments={routeSegments} onRouteCalculated={handleRouteCalculated} />}
         <StraightLineMachine routes={cableCarRoute} />
+
+        {/* --- CHÈN THÊM ĐOẠN NÀY ĐỂ VẼ ĐƯỜNG ĐI BỘ TRÊN ĐỈNH NÚI --- */}
+        {walkRoute && walkRoute.segments && walkRoute.segments.map((seg, idx) => (
+          <Polyline
+            key={idx}
+            positions={seg.coords}
+            pathOptions={{
+              color: seg.isTrain ? "#2ecc71" : "#ff4d4f", // Xanh lá nếu là tàu, đỏ nếu đi bộ
+              weight: 5,
+              opacity: 0.9,
+              dashArray: seg.isTrain ? "8, 8" : "" // Nét đứt cho tàu, nét liền cho đi bộ
+            }}
+          />
+        ))}
+        {/* --------------------------------------------------------- */}
         
         <Marker position={myLocationCoords} icon={redPinIcon} ref={redMarkerRef}>
           <Popup>
@@ -794,7 +1007,23 @@ const filteredPlaces = useMemo(() => {
           <h2>Chi tiết</h2>
           <div className="route-summary">
             <span className="summary-item"><FaWalking className="text-green"/> {routeSummary.dist}</span>
-            <span className="summary-item"><FiClock className="text-green"/> {routeSummary.time}</span>
+
+
+            {/* --- SỬA LẠI THẺ SPAN THỜI GIAN Ở ĐÂY --- */}
+            <span className="summary-item" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '5px' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <FiClock className="text-green"/> {routeSummary.time}
+              </span>
+              {showWalkingNote && (
+                <span style={{ fontSize: '11.5px', color: '#666', fontStyle: 'italic', fontWeight: 'normal' }}>
+                  (Chưa bao gồm thời gian đi dạo trên đỉnh núi Fansipan, đi Tàu, đi Cáp treo)
+                </span>
+              )}
+            </span>
+            {/* -------------------------------------- */}
+
+
+
           </div>
           <button className="close-sheet-btn" onClick={() => setShowRouteDetails(false)}><IoClose /></button>
         </div>
