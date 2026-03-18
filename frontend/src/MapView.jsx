@@ -4,9 +4,23 @@ import { HiLocationMarker, HiInformationCircle, HiClock, HiMenu, HiSearch, HiX }
 import 'leaflet/dist/leaflet.css';
 import fansipanData from './data/fansipan.json';
 import './MapView.css'; 
-import React, { useState, useEffect, useRef, useMemo } from 'react'; 
-import { FiNavigation, FiHome } from "react-icons/fi"; 
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+
 import { useNavigate, useLocation } from "react-router-dom"; 
+
+
+
+
+import { FiNavigation, FiHome, FiClock, FiArrowUp } from "react-icons/fi"; 
+import { FaWalking } from 'react-icons/fa';
+import { MdTurnRight } from 'react-icons/md';
+import { BiCheckDouble } from 'react-icons/bi';
+import { IoClose } from 'react-icons/io5';
+
+
+
+
+
 
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
@@ -82,32 +96,48 @@ const ImageCarousel = ({ images }) => {
 };
 
 
-// Component vẽ đường OSRM nhận nhiều toạ độ điểm mù (waypoints)
-const RoutingMachine = ({ segments }) => {
+const RoutingMachine = ({ segments, onRouteCalculated }) => {
   const map = useMap();
   const routingControlsRef = useRef([]);
 
   useEffect(() => {
     if (!map || !segments || segments.length === 0) return;
 
-    routingControlsRef.current.forEach(control => {
-      map.removeControl(control);
-    });
+    // Dọn dẹp các control cũ
+    routingControlsRef.current.forEach(control => map.removeControl(control));
     routingControlsRef.current = [];
 
-    segments.forEach(segment => {
-      // Nhận mảng segment có thể có 2, 3 hoặc 4 điểm và vẽ liền mạch qua tất cả
+    let segmentResults = []; // Mảng lưu kết quả chi tiết từng chặng
+    let completedRequests = 0;
+
+    segments.forEach((segment, index) => {
       const control = L.Routing.control({
         waypoints: segment.map(p => L.latLng(p[0], p[1])),
-        lineOptions: { 
-          styles: [{ color: '#1d61ff', weight: 6, opacity: 0.8 }] 
-        },
-        addWaypoints: false,
+        lineOptions: { styles: [{ color: '#1d61ff', weight: 6, opacity: 0.8 }] },
+        addWaypoints: false, 
         draggableWaypoints: false,
-        fitSelectedRoutes: true,
+        fitSelectedRoutes: index === 0, // Chỉ fit khung hình cho chặng đầu hoặc tùy chỉnh
         showAlternatives: false,
         createMarker: () => null,
       }).addTo(map);
+
+      control.on('routesfound', function(e) {
+        const routes = e.routes;
+        if (routes && routes[0]) {
+           const summary = routes[0].summary; 
+           // Lưu đúng vị trí của chặng trong mảng kết quả
+           segmentResults[index] = {
+             distance: summary.totalDistance,
+             time: summary.totalTime
+           };
+        }
+        
+        completedRequests++;
+        // Khi tất cả các chặng (ví dụ: 2 chặng) đã gọi server xong
+        if (completedRequests === segments.length && onRouteCalculated) {
+          onRouteCalculated(segmentResults);
+        }
+      });
       
       routingControlsRef.current.push(control);
     });
@@ -118,7 +148,7 @@ const RoutingMachine = ({ segments }) => {
       });
       routingControlsRef.current = [];
     };
-  }, [map, segments]);
+  }, [map, segments]); 
 
   return null;
 };
@@ -194,12 +224,143 @@ const MapView = () => {
   const [myLocationCoords, setMyLocationCoords] = useState([22.3371665, 103.824208]);
   const centerPosition = [22.303246, 103.777648];
   
-  const [gpsInfo, setGpsInfo] = useState(location.state?.gpsInfo || "Vị trí mặc định (Ga Mường Hoa)");
+  const [gpsInfo, setGpsInfo] = useState(location.state?.gpsInfo || "Fansipan View");
   const [currentArea, setCurrentArea] = useState(location.state?.areaData || "Khu vực Mường Hoa");
 
   const [routeSegments, setRouteSegments] = useState(null);
   const [isRouting, setIsRouting] = useState(false); 
   const [cableCarRoute, setCableCarRoute] = useState(null);
+
+
+  // === STATE MỚI CHO BẢNG CHI TIẾT ===
+  const [showRouteDetails, setShowRouteDetails] = useState(false);
+  const [routeSteps, setRouteSteps] = useState([]); // State chứa danh sách các bước
+  const [routeSummary, setRouteSummary] = useState({ dist: '0m', time: '0 phút' }); // State chứa tổng quan
+
+
+
+  const handleRouteCalculated = useCallback((allSegmentsData) => {
+  const formatDist = (d) => d >= 1000 ? (d / 1000).toFixed(1) + ' km' : Math.round(d) + ' m';
+  const formatTime = (t) => Math.max(1, Math.round(t / 60)) + ' phút';
+
+  const totalDist = allSegmentsData.reduce((sum, seg) => sum + (seg?.distance || 0), 0);
+  const totalTime = allSegmentsData.reduce((sum, seg) => sum + (seg?.time || 0), 0);
+  
+  setRouteSummary({ dist: formatDist(totalDist), time: formatTime(totalTime) });
+
+  setRouteSteps(prevSteps => {
+    return prevSteps.map(step => {
+      // Kiểm tra nếu bước này có yêu cầu dữ liệu từ server qua serverIdx
+      if (step.type === 'walking' && step.serverIdx !== undefined && step.serverIdx !== null) {
+        const segmentData = allSegmentsData[step.serverIdx];
+        if (segmentData) {
+
+          if (segmentData.distance === 0) {
+            return {
+              ...step,
+              dist: 'Không tính toán được tuyến đường đi bộ' // Ghi đè mô tả để user hiểu
+            };
+          }
+
+          return {
+            ...step,
+            dist: formatDist(segmentData.distance)
+          };
+        }
+      }
+      return step;
+    });
+  });
+
+  setIsRouting(false);
+  setShowRouteDetails(true);
+}, []);
+
+  const generateRouteDetails = (destination) => {
+  const steps = [];
+  const startArea = currentArea;
+  const endArea = destination.area;
+  let stepId = 1;
+  let currentServerIdx = 0; // Biến đánh dấu chỉ số chặng từ Server
+
+  const stations = ["Ga Fansipan", "Ga Hoàng Liên", "Ga tàu hỏa leo núi Mường Hoa", "Ga Sapa"];
+  const isStartAtStation = stations.some(s => gpsInfo.includes(s));
+  const isEndAtStation = stations.some(s => destination.name.includes(s));
+  const isSameArea = startArea === endArea;
+
+  // 1. Vị trí xuất phát
+  steps.push({ id: stepId++, icon: <FiArrowUp />, title: 'Vị trí của bạn', desc: gpsInfo.replace('Điểm xuất phát: ', ''), dist: '' });
+
+  // 2. TRƯỜNG HỢP 5 CHẶNG (Fansipan <-> Sapa)
+  const isCrossComplex = ((startArea === "Khu vực Fansipan" && endArea === "Khu vực Sun Plaza - Sapa") || (startArea === "Khu vực Sun Plaza - Sapa" && endArea === "Khu vực Fansipan"));
+
+  if (isCrossComplex) {
+    // Chặng đi bộ 1: Ra ga đầu
+    if (!isStartAtStation) {
+      steps.push({ 
+        id: stepId++, type: 'walking', icon: <FaWalking />, 
+        title: 'Đi bộ đến', desc: (startArea === "Khu vực Sun Plaza - Sapa")?'Ga Sapa':'Ga Fansipan',
+        dist: '...', serverIdx: currentServerIdx // Đánh dấu lấy index 0
+      });
+    }
+    currentServerIdx++; // QUAN TRỌNG: Dù có push vào UI hay không, index của server vẫn tăng
+
+    // Chặng cáp 1
+    steps.push({ id: stepId++, icon: <MdTurnRight />, 
+      title: (startArea === "Khu vực Sun Plaza - Sapa")?'Tàu hỏa leo núi':'Tuyến cáp treo', 
+      desc:  (startArea === "Khu vực Sun Plaza - Sapa")?'Di chuyển bằng Tàu hỏa leo núi Mường Hoa':'Di chuyển bằng Cáp treo Fansipan', 
+      dist:  (startArea === "Khu vực Sun Plaza - Sapa")?'2000 m':'6292,5 m'});
+
+    // Chặng đi bộ 2: Chuyển ga
+    steps.push({ 
+      id: stepId++, type: 'walking', icon: <FaWalking />, 
+      title: 'Đi bộ đến', desc: (startArea === "Khu vực Sun Plaza - Sapa")? 'Ga Hoàng Liên': 'Ga Mường Hoa', 
+      dist: '...', serverIdx: currentServerIdx // Đánh dấu lấy index tiếp theo
+    });
+    currentServerIdx++;
+
+    // Chặng cáp 2
+    steps.push({ id: stepId++, icon: <MdTurnRight />, 
+      title:  (startArea === "Khu vực Sun Plaza - Sapa")?'Tuyến cáp treo':'Tàu hỏa leo núi', 
+      desc:   (startArea === "Khu vực Sun Plaza - Sapa")?'Di chuyển bằng Cáp treo Fansipan':'Di chuyển bằng Tàu hỏa leo núi Mường Hoa', 
+      dist:   (startArea === "Khu vực Sun Plaza - Sapa")?'6292,5 m':'2000 m' 
+    });
+
+  } 
+  // 3. TRƯỜNG HỢP 1 CHẶNG CÁP
+  else if (!isSameArea) {
+    if (!isStartAtStation) {
+      steps.push({ 
+        id: stepId++, type: 'walking', icon: <FaWalking />, 
+        title: 'Đi bộ ra ga', desc: `Tại ${startArea}`, 
+        dist: '...', serverIdx: currentServerIdx 
+      });
+    }
+    currentServerIdx++; // Tăng index để dành chỗ cho chặng đầu (dù là 0m)
+
+    steps.push({ id: stepId++, icon: <MdTurnRight />,
+      title: (startArea === "Khu vực Sun Plaza - Sapa" || endArea=== "Khu vực Sun Plaza - Sapa")?'Tàu hỏa leo núi':'Tuyến cáp treo', 
+      desc: (startArea === "Khu vực Sun Plaza - Sapa" || endArea=== "Khu vực Sun Plaza - Sapa")?'Di chuyển bằng Tàu hỏa leo núi Mường Hoa':'Di chuyển bằng Cáp treo Fansipan', 
+      dist: (startArea === "Khu vực Sun Plaza - Sapa" || endArea=== "Khu vực Sun Plaza - Sapa")?'2000 m':'6292,5 m' 
+    });
+  }
+
+  // 4. CHẶNG CUỐI: Đi bộ đến đích
+  const isAtGoal = isEndAtStation && !isSameArea;
+  steps.push({ 
+    id: stepId++, 
+    type: 'walking', 
+    icon: <BiCheckDouble />, 
+    title: isAtGoal ?destination.name:'Đi bộ đến', 
+    desc: isAtGoal ?destination.area:destination.name, 
+    dist: isAtGoal ? 'Tại ga' : '...',
+    // Nếu không phải "Tại ga", dùng index hiện tại của server
+    serverIdx: isAtGoal ? null : currentServerIdx 
+  });
+
+  setRouteSteps(steps);
+};
+
 
 // HÀM: Đưa camera về lại vị trí xuất phát (hoặc vị trí GPS hiện tại)
   const handleReturnToMyLocation = () => {
@@ -252,7 +413,7 @@ const MapView = () => {
       ) {
         addLine(straightPoints); // Gọi hàm addLine
       }
-      else if (
+      if (
          (currentArea === "Khu vực Sun Plaza - Sapa" && destinationArea !== "Khu vực Sun Plaza - Sapa") || (currentArea !== "Khu vực Sun Plaza - Sapa" && destinationArea === "Khu vực Sun Plaza - Sapa")
       ){
         addLine(straightPointsSapa); // Gọi hàm addLine
@@ -281,7 +442,7 @@ const filteredPlaces = useMemo(() => {
       const areaMatch = f.properties.area?.toLowerCase().includes(lowerSearchTerm);
       
       // Trả về true nếu tên HOẶC khu vực chứa từ khóa tìm kiếm
-      return nameMatch || areaMatch;
+      return nameMatch;
     });
   }, [searchTerm]);
 
@@ -375,10 +536,10 @@ const filteredPlaces = useMemo(() => {
       setRouteSegments(segments);
     }
 
-    // Tắt Loading sau 2.5s (Giả lập chờ server OSRM phản hồi)
-    setTimeout(() => {
-        setIsRouting(false);
-    }, 2500);
+    // // Tắt Loading sau 2.5s (Giả lập chờ server OSRM phản hồi)
+    // setTimeout(() => {
+    //     setIsRouting(false);
+    // }, 2500);
   };
 
   return (
@@ -467,7 +628,7 @@ const filteredPlaces = useMemo(() => {
         <InitialFlyToUser coords={myLocationCoords} markerRef={redMarkerRef} />
 
         {/* LOGIC VẼ ĐƯỜNG */}
-        {routeSegments && <RoutingMachine segments={routeSegments} />}
+        {routeSegments && <RoutingMachine segments={routeSegments} onRouteCalculated={handleRouteCalculated} />}
         <StraightLineMachine routes={cableCarRoute} />
         
         <Marker position={myLocationCoords} icon={redPinIcon} ref={redMarkerRef}>
@@ -507,6 +668,15 @@ const filteredPlaces = useMemo(() => {
           ))}
         </div>
       </div>
+      
+      <button 
+        className="my-new-btn" // Bạn có thể giữ nguyên class này để dùng chung style
+        onClick={() => setShowRouteDetails(true)} // Thay bằng hàm xử lý của bạn
+        title="Hành động khác"
+      >
+        {/* Thay icon dưới đây bằng icon bạn muốn */}
+        <FiNavigation className="my-location-icon" /> 
+      </button>
 
       <button 
         className="my-location-btn"
@@ -580,33 +750,75 @@ const filteredPlaces = useMemo(() => {
 
               {/* NÚT 2: CHỈ ĐƯỜNG ĐẾN ĐÂY */}
               <button 
-                className="direction-btn" 
-                disabled={isRouting}
-                style={{ 
-                  flex: 1, background: isRouting ? '#88aaff' : '#1d61ff', 
-                  color: '#ffffff', border: 'none', padding: '12px 10px', 
-                  borderRadius: '8px', cursor: isRouting ? 'wait' : 'pointer', 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', 
-                  fontWeight: 'bold', transition: 'all 0.3s', fontSize: '13px', margin: 0
-                }} 
+                className="direction-btn" disabled={isRouting}
+                style={{ flex: 1, background: isRouting ? '#88aaff' : '#1d61ff', color: '#ffffff', border: 'none', padding: '12px 10px', borderRadius: '8px', cursor: isRouting ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', transition: 'all 0.3s', fontSize: '13px', margin: 0 }} 
                 onClick={() => {
                   if (!isRouting) {
+                    // 1. Chỉ chuẩn bị sẵn data chữ (Khoảng cách = "Đang tính...")
+                    generateRouteDetails(selectedPlace);
+                    
+                    // 2. Bắt đầu gọi server vẽ đường (Xong nó sẽ tự gọi hàm handleRouteCalculated ở trên)
                     handleGetDirections();     
                     handleGetCableCarLine();   
-                    setTimeout(() => {
-                      setSelectedPlace(null);
-                    },3000);
                   }
                 }}
               >
                 <FiNavigation style={{ fontSize: '18px', marginRight: '5px' }} /> 
                 {isRouting ? 'Đang dò...' : 'Chỉ đường đến đây'}
               </button>
+
+      
+
             </div>
 
           </div>
         </div>
       )}
+
+      
+
+
+      {/* ==========================================
+          BOTTOM SHEET: CHI TIẾT TUYẾN ĐƯỜNG
+          ========================================== */}
+      {/* Lớp nền đen mờ (Overlay) */}
+      {showRouteDetails && (
+        <div className="route-overlay" onClick={() => setShowRouteDetails(false)}></div>
+      )}
+
+      {/* Bảng trượt Bottom Sheet (Luôn render để CSS animation trượt lên hoạt động mượt) */}
+      <div className={`route-bottom-sheet ${showRouteDetails ? 'open' : ''}`}>
+        
+        {/* Header: Tiêu đề + Thông tin tổng */}
+        <div className="route-header">
+          <h2>Chi tiết</h2>
+          <div className="route-summary">
+            <span className="summary-item"><FaWalking className="text-green"/> {routeSummary.dist}</span>
+            <span className="summary-item"><FiClock className="text-green"/> {routeSummary.time}</span>
+          </div>
+          <button className="close-sheet-btn" onClick={() => setShowRouteDetails(false)}><IoClose /></button>
+        </div>
+
+        {/* Danh sách các bước đi */}
+        <div className="route-steps-container">
+          {routeSteps.map((step) => (
+            <div className="route-step-card" key={step.id}>
+              <div className="step-icon-wrapper">
+                {step.icon}
+              </div>
+              <div className="step-info">
+                <h3 className="step-title">{step.title}</h3>
+                <p className="step-desc">{step.desc}</p>
+                {step.dist && <span className="step-dist">{step.dist}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+
+
     </div>
   );
 };
