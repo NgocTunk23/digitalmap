@@ -3,7 +3,7 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.774694, 22.306694 ] }, 
+      "geometry": { "type": "Point", "coordinates": [103.774694, 22.306694] },
       "properties": {
         "name": "Shop Tuyết Tùng",
         "description": "Cửa hàng lưu niệm nằm trong khu tham quan Fansipan, cung cấp quà tặng, đặc sản vùng cao và sản phẩm mang dấu ấn đỉnh núi. Đây là điểm dừng chân thuận tiện trước hoặc sau khi tham quan khu tâm linh.",
@@ -14,7 +14,10 @@
     },
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.774694, 22.3065] },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77478049534272, 22.306607549827092]
+      },
       "properties": {
         "name": "Ga Fansipan",
         "description": " Ga trung chuyển kết nối hệ thống cáp treo với khu vực đỉnh Fansipan. Từ đây, du khách bắt đầu hành trình khám phá quần thể tâm linh và chinh phục “Nóc nhà Đông Dương”.",
@@ -46,7 +49,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77485739902318, 22.306216615127]
+        "coordinates": [103.77486243946726, 22.306019045672116]
       },
       "properties": {
         "name": "Thanh Vân Đắc Lộ",
@@ -60,7 +63,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77496184254352, 22.305818916264755]
+        "coordinates": [103.77493273738929, 22.305727029272845]
       },
       "properties": {
         "name": "Đền thờ Tam Thánh Mẫu",
@@ -74,7 +77,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77506341851324, 22.305674339020584]
+        "coordinates": [103.77501796356086, 22.30559126473395]
       },
       "properties": {
         "name": "Chùa Hạ - Bích Vân Thiền Tự",
@@ -88,7 +91,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77514546064435, 22.305510785832396]
+        "coordinates": [103.77510148254999, 22.305451504990828]
       },
       "properties": {
         "name": "Đền thờ Đức Thánh Trần",
@@ -102,10 +105,10 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.7752994848766, 22.305290214306225]
+        "coordinates": [103.77532217214718, 22.305270668101272]
       },
       "properties": {
-        "name": "Ga tàu hỏa leo núi Fansipan",
+        "name": "Ga tàu hỏa leo núi Fansipan - Đỗ Quyên",
         "description": "Ga thuộc tuyến tàu hỏa leo núi nội khu trên đỉnh Fansipan. Tuyến tàu ngắn kết nối Ga cáp treo Fansipan với khu Đại tượng Phật, hỗ trợ du khách di chuyển thuận tiện thay vì đi bộ qua nhiều bậc thang.",
         "area": "Khu vực Fansipan",
         "images": ["images/gatauhoaleonuifansipan.jpg"],
@@ -121,7 +124,26 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77518, 22.306252056222462]
+        "coordinates": [103.77544770173432, 22.303482761004602]
+      },
+      "properties": {
+        "name": "Ga tàu hỏa leo núi Fansipan - Trúc Mây",
+        "description": "Ga thuộc tuyến tàu hỏa leo núi nội khu trên đỉnh Fansipan. Tuyến tàu ngắn kết nối Ga cáp treo Fansipan với khu Đại tượng Phật, hỗ trợ du khách di chuyển thuận tiện thay vì đi bộ qua nhiều bậc thang.",
+        "area": "Khu vực Fansipan",
+        "images": ["images/gatauhoaleonuifansipan.jpg"],
+        "operating_hours": [
+          "Thứ 2 - Thứ 5: 08:00 - 16:00",
+          "Thứ 6: 08:00 - 17:00",
+          "Thứ 7: 07:30 - 17:00",
+          "Chủ nhật: 07:30 - 16:00"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77510155654096, 22.306273822177715]
       },
       "properties": {
         "name": "Nhà Hàng Hải Cảng Fansipan",
@@ -160,7 +182,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.7754, 22.3044]
+        "coordinates": [103.77537488777631, 22.304423937466822]
       },
       "properties": {
         "name": "Đại tượng Phật",
@@ -185,7 +207,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.7753283639409, 22.303599337535488]
+        "coordinates": [103.77535639628803, 22.30355282911222]
       },
       "properties": {
         "name": "Cột cờ",
@@ -213,7 +235,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77560, 22.30356]
+        "coordinates": [103.7756, 22.30356]
       },
       "properties": {
         "name": "Lầu vọng cảnh",
@@ -238,14 +260,16 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77682, 22.3039]
+        "coordinates": [103.77679809668098, 22.303900595650617]
       },
       "properties": {
         "name": "Chòi nghỉ",
         "description": "Chòi Nghỉ là điểm dừng chân lý tưởng cho du khách trên hành trình tham quan khu tâm linh. Tại đây, du khách có thể nghỉ ngơi, ngắm cảnh núi rừng Sa Pa và tận hưởng không khí trong lành, yên tĩnh.",
         "area": "Khu vực Fansipan",
         "images": ["images/choinghi.jpg"],
-        "operating_hours": ["Mỗi ngày: 08:00 - 16:30 (theo giờ mở cửa của khu tham quan)"]
+        "operating_hours": [
+          "Mỗi ngày: 08:00 - 16:30 (theo giờ mở cửa của khu tham quan)"
+        ]
       }
     },
     {
@@ -255,18 +279,11 @@
         "name": "Chùa thượng - Vân Phong Thiền Tự",
         "description": "Ngôi chùa toạ lạc ở độ cao 3.091m, được thiết kế theo kiến trúc thời Trần bao gồm Tam bảo, Nhà tổ và 2 dãy hành lang. Nằm giữa không gian hùng vĩ của đỉnh Fansipan huyền thoại, sở hữu vẻ đẹp bồng lai, là chốn linh thiêng, mang đến sự an lành, bình yên cho du khách.",
         "area": "Khu vực Fansipan",
-        "images": ["images/chuathuongvanphongthientu1.jpg", "images/chuathuongvanphongthientu2.jpg", "images/chuathuongvanphongthientu3.jpg"],
-        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [103.776528, 22.3035] },
-      "properties": {
-        "name": "Bảo Tháp",
-        "description": "Công trình tâm linh nổi bật trong khu vực, mang ý nghĩa lưu giữ giá trị Phật giáo và biểu tượng cho sự giác ngộ. Bảo tháp cao 11 tầng, bề mặt tháp được ghép từ đá, đỉnh hình tháp hoa sen được đúc bằng đồng. Công trình mang phong cách kiến trúc đặc trưng của miền Bắc như tháp Phổ Minh (Nam Định), tháp Bình Sơn (Vĩnh Phúc).",
-        "area": "Khu vực Fansipan",
-        "images": ["images/baothap1.jpg", "images/baothap2.jpg", "images/baothap3.jpg"],
+        "images": [
+          "images/chuathuongvanphongthientu1.jpg",
+          "images/chuathuongvanphongthientu2.jpg",
+          "images/chuathuongvanphongthientu3.jpg"
+        ],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
       }
     },
@@ -274,13 +291,34 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77730569976654, 22.303312272412228]
+        "coordinates": [103.77649949443799, 22.303444174414963]
+      },
+      "properties": {
+        "name": "Bảo Tháp",
+        "description": "Công trình tâm linh nổi bật trong khu vực, mang ý nghĩa lưu giữ giá trị Phật giáo và biểu tượng cho sự giác ngộ. Bảo tháp cao 11 tầng, bề mặt tháp được ghép từ đá, đỉnh hình tháp hoa sen được đúc bằng đồng. Công trình mang phong cách kiến trúc đặc trưng của miền Bắc như tháp Phổ Minh (Nam Định), tháp Bình Sơn (Vĩnh Phúc).",
+        "area": "Khu vực Fansipan",
+        "images": [
+          "images/baothap1.jpg",
+          "images/baothap2.jpg",
+          "images/baothap3.jpg"
+        ],
+        "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [103.77730932554948, 22.303101720514476]
       },
       "properties": {
         "name": "Tượng Quán Thế Âm Bồ Tát",
         "description": "Tượng Quán Thế Âm Bồ Tát được đặt tại vị trí trang trọng, được đúc bằng đồng, cao 12m, nặng 18 tấn, mắt hướng nhìn về phía Đông, tay phải của tượng cầm cành dương liễu, tay trái cầm bình cam lộ biểu trưng cho lòng từ bi và nhân ái. Chắp tay trước tượng đồng Quan thế âm Bồ Tát ngự trên tảng đá lớn với tầm nhìn hướng xuống dân gian, du khách sẽ cảm thấy lòng an yên đến lạ.",
         "area": "Khu vực Fansipan",
-        "images": ["images/tuongquantheambotat1.jpg", "images/tuongquantheambotat2.jpg"],
+        "images": [
+          "images/tuongquantheambotat1.jpg",
+          "images/tuongquantheambotat2.jpg"
+        ],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
       }
     },
@@ -288,7 +326,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [103.77764787907557, 22.30324571862225]
+        "coordinates": [103.77759484514957, 22.303195200732915]
       },
       "properties": {
         "name": "Miếu Sơn Thần",
@@ -319,7 +357,10 @@
         "name": "Chùa trình - Bảo An Thiền Tự",
         "description": "Nằm trên địa thế tuyệt đẹp ở độ cao 1604m trong quần thể Ga Hoàng Liên, Bảo An Thiền Tự là điểm dừng chân đầu tiên của du khách trước khi bước vào hành trình hành hương lễ Phật và khám khá đỉnh Fansipan Huyền thoại.",
         "area": "Khu vực Mường Hoa",
-        "images": ["images/chuatrinhbaoanthientu1.jpg", "images/chuatrinhbaoanthientu2.jpg"],
+        "images": [
+          "images/chuatrinhbaoanthientu1.jpg",
+          "images/chuatrinhbaoanthientu2.jpg"
+        ],
         "operating_hours": ["Mỗi ngày: 08:00 - 16:30"]
       }
     },
@@ -344,10 +385,14 @@
         "name": "Ga tàu hỏa leo núi Mường Hoa",
         "description": "Ga Mường Hoa là ga đến của chuyến tàu Hỏa leo núi Mường Hoa, điểm trung chuyển du khách từ thị trấn lên cảnh tiên Fansipan. Đến Ga Mường Hoa vào tháng 5 - tháng 6, du khách sẽ tìm thấy ngay vườn hoa Rum nhất Sa Pa khỏe sắc qua ô cửa kính, vườn hoa nằm ngay hoàng ra ga, bên cạnh kiến ​​trúc cổ kính làm cho du khách như câu lạc bộ khung cảnh Paris hoa lệ giữa Sa Pa.",
         "area": "Khu vực Mường Hoa",
-        "images": ["images/gatauhoaleonuimuonghoa1.jpg", "images/gatauhoaleonuimuonghoa2.png"],
+        "images": [
+          "images/gatauhoaleonuimuonghoa1.jpg",
+          "images/gatauhoaleonuimuonghoa2.png"
+        ],
         "operating_hours": [
           "Thứ 2 - thứ 6: 08:15 - 18:00",
-          "Thứ bảy - chủ nhật: 07:45 - 18:30"]
+          "Thứ bảy - chủ nhật: 07:45 - 18:30"
+        ]
       }
     },
     {
@@ -368,7 +413,10 @@
         "name": "Sapa Signature Inn",
         "description": "Nằm ở Sa Pa, cách Trạm cáp treo Fansipan 6.4 km, Sapa Signature Inn cung cấp chỗ nghỉ có khu vườn, chỗ đậu xe riêng miễn phí, phòng chờ chung và nhà hàng.",
         "area": "Khu vực Mường Hoa",
-        "images": ["images/sapasignatureinn1.png", "images/sapasignatureinn2.png"],
+        "images": [
+          "images/sapasignatureinn1.png",
+          "images/sapasignatureinn2.png"
+        ],
         "operating_hours": ["Mỗi ngày: Chưa có thông tin."]
       }
     },
@@ -393,7 +441,8 @@
         "images": ["images/gahoanglien1.png", "images/gahoanglien2.png"],
         "operating_hours": [
           "Thứ 2 - thứ 6: 08:00 - 16:00",
-          "Thứ 7 & Chủ nhật: 7:45- 18:30"]
+          "Thứ 7 & Chủ nhật: 7:45- 18:30"
+        ]
       }
     },
     {
@@ -406,10 +455,14 @@
         "name": "Hotel de la Coupole - MGallery",
         "description": "Toạ lạc tại trung tâm của thị trấn Sapa, Hotel de la Coupole, MGallery by Sofitel là địa điểm để du khách có thể dễ dàng di chuyển đến mọi thắng cảnh nổi tiếng của Sapa cũng như tận hưởng không khí nhộn nhịp của vùng đất này. Khoảng cách: 5 tiếng từ Hà Nội đi oto, 8 tiếng từ Hà Nội đi tàu và chuyển phương tiện tại ga Lào Cai.",
         "area": "Khu vực Sun Plaza - Sapa",
-        "images": ["images/hoteldelacoupolemgallery1.jpg", "images/hoteldelacoupolemgallery2.jpg"],
+        "images": [
+          "images/hoteldelacoupolemgallery1.jpg",
+          "images/hoteldelacoupolemgallery2.jpg"
+        ],
         "operating_hours": [
           "Thời gian check in: 14:00",
-          "Thời gian check out: 12:00"]
+          "Thời gian check out: 12:00"
+        ]
       }
     },
     {
