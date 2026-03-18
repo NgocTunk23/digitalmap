@@ -739,7 +739,7 @@ const filteredPlaces = useMemo(() => {
   // 3. CHỐT LOGIC: Chỉ hiện ghi chú khi đi từ Dưới Phố <-> Sâu Trong Đỉnh
   const showWalkingNote = (isStartBelow && isEndDeepInPeak) || (isStartDeepInPeak && isEndBelow);
   // ---------------------------------------------------------
-  
+
   return (
     <div className="map-wrapper" style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       
@@ -973,6 +973,11 @@ const filteredPlaces = useMemo(() => {
                     // 2. Bắt đầu gọi server vẽ đường (Xong nó sẽ tự gọi hàm handleRouteCalculated ở trên)
                     handleGetDirections();     
                     handleGetCableCarLine();   
+
+                    // 3. TỰ ĐỘNG ĐÓNG BẢNG THÔNG TIN (Sau 0.3 giây để UI mượt và không bị lỗi mất data)
+                    setTimeout(() => {
+                      setSelectedPlace(null);
+                    }, 300);
                   }
                 }}
               >
