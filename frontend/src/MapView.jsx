@@ -913,21 +913,7 @@ const filteredPlaces = useMemo(() => {
 
             <h2 className="place-name">{selectedPlace.name}</h2>
             <span className="area-badge">{selectedPlace.area}</span>
-            <div className="info-card">
-              <div className="info-item">
-                <div className="icon-container"><HiLocationMarker style={{ color: '#1d61ff', fontSize: '24px' }} className="icon-item-react" /></div>
-                <div><strong>Vị trí địa điểm</strong><p>{fansipanData.features.find(f => f.properties.name === selectedPlace.name)?.geometry.coordinates.slice().reverse().join(', ')}</p></div>
-              </div>
-              <div className="info-item">
-                <div className="icon-container"><HiInformationCircle style={{ color: '#1d61ff', fontSize: '24px' }} className="icon-item-react" /></div>
-                <div><strong>Thông tin</strong><p>{selectedPlace.description}</p></div>
-              </div>
-              <div className="info-item">
-                <div className="icon-container"><HiClock style={{ color: '#1d61ff', fontSize: '24px' }} className="icon-item-react" /></div>
-                <div><strong>Giờ mở cửa</strong><p>{selectedPlace.operating_hours?.join(' | ')}</p></div>
-              </div>
-            </div>
-            
+
             {/* CỤM NÚT ĐIỀU HƯỚNG MỚI (Nằm ngang) */}
             <div style={{ display: 'flex', gap: '10px', marginTop: '15px', width: '100%' }}>
               
@@ -988,6 +974,24 @@ const filteredPlaces = useMemo(() => {
       
 
             </div>
+
+
+            <div className="info-card">
+              <div className="info-item">
+                <div className="icon-container"><HiLocationMarker style={{ color: '#1d61ff', fontSize: '24px' }} className="icon-item-react" /></div>
+                <div><strong>Vị trí địa điểm</strong><p>{fansipanData.features.find(f => f.properties.name === selectedPlace.name)?.geometry.coordinates.slice().reverse().join(', ')}</p></div>
+              </div>
+              <div className="info-item">
+                <div className="icon-container"><HiInformationCircle style={{ color: '#1d61ff', fontSize: '24px' }} className="icon-item-react" /></div>
+                <div><strong>Thông tin</strong><p>{selectedPlace.description}</p></div>
+              </div>
+              <div className="info-item">
+                <div className="icon-container"><HiClock style={{ color: '#1d61ff', fontSize: '24px' }} className="icon-item-react" /></div>
+                <div><strong>Giờ mở cửa</strong><p>{selectedPlace.operating_hours?.join(' | ')}</p></div>
+              </div>
+            </div>
+            
+
 
           </div>
         </div>
