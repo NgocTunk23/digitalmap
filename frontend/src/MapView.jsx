@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 
 import { useNavigate, useLocation } from "react-router-dom"; 
 
-
+import logoImg from './assets/logo.png'; // Thêm import logo
 
 
 import { FiNavigation, FiHome, FiClock, FiArrowUp } from "react-icons/fi"; 
@@ -754,9 +754,17 @@ const filteredPlaces = useMemo(() => {
           <FiHome className="home-icon" /> <span>Trang chủ</span>
         </button>
         
-        <span className="header-title" style={{ fontWeight: '900', letterSpacing: '-1.5px', fontSize: '1.6rem', color: '#000000' }}>
-          Sunworld Fansipan Legend
-        </span>
+        {/* Thay thế span chữ bằng thẻ img logo */}
+        <img 
+          src={logoImg} 
+          alt="Sunworld Fansipan Legend Logo" 
+          className="header-title"
+          style={{ 
+            height: '40px', // Bạn có thể tăng giảm thông số này cho vừa vặn với chiều cao của header
+            width: 'auto', 
+            objectFit: 'contain' 
+          }} 
+        />
       </div>
 
      {/* ==========================================
@@ -885,7 +893,7 @@ const filteredPlaces = useMemo(() => {
       <button 
         className="my-new-btn" // Bạn có thể giữ nguyên class này để dùng chung style
         onClick={() => setShowRouteDetails(true)} // Thay bằng hàm xử lý của bạn
-        title="Hành động khác"
+        title="Bảng chỉ đường"
       >
         {/* Thay icon dưới đây bằng icon bạn muốn */}
         <FiNavigation className="my-location-icon" /> 

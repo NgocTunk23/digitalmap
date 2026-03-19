@@ -408,7 +408,7 @@ p, span, .area-badge {
    ========================================== */
 @media (max-width: 768px) {
   .my-location-btn {
-    bottom: 20px; 
+    bottom: 80px; 
     left: 15px;   
     width: 40px !important;  
     height: 40px !important;
@@ -530,7 +530,7 @@ p, span, .area-badge {
    ========================================== */
 @media (max-width: 768px) {
   .my-new-btn {
-    bottom: 68px; /* 20px (đáy) + 40px (nút dưới) + 8px (khoảng cách) */
+    bottom: 128px; /* 20px (đáy) + 40px (nút dưới) + 8px (khoảng cách) */
     left: 15px;   
     width: 40px !important;  
     height: 40px !important;
@@ -709,4 +709,28 @@ p, span, .area-badge {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+
+
+
+.rounded-box {
+  background-color: #f9fafb; /* Màu nền trắng hoặc xám rất nhạt, giống trong ảnh */
+  border-radius: 12px;     /* Góc bo tròn 12px. Bạn có thể tăng giảm số này. */
+  padding: 24px 30px;       /* Khoảng cách bên trong, tạo không gian xung quanh văn bản */
+  width: fit-content;       /* Khung tự động co lại theo độ dài của văn bản */
+  max-width: 80%;           /* Đảm bảo khung không quá rộng trên màn hình nhỏ */
+  margin: 20px auto;        /* Căn giữa thẻ trên trang */
+  text-align: center;       /* Căn giữa văn bản bên trong */
+  
+  /* Thêm bóng đổ nhẹ để tạo hiệu ứng khung nổi bật hơn, nếu bạn muốn */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-box p {
+  margin: 0;
+  color: #1a202c;          /* Màu văn bản xanh đen sẫm */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Phông chữ không chân giống trong ảnh */
+  font-size: 1.1rem;        /* Kích thước phông chữ, có thể tinh chỉnh */
+  line-height: 1.6;        /* Khoảng cách giữa các dòng tốt hơn */
 }

@@ -1,10 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react'; // 1. Thêm useRef, useEffect
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import MapView from './MapView';
 import './App.css';
 import fansipanData from './data/fansipan.json';
-import introVideo from './assets/video.mp4'; 
+import introVideo from './assets/video.mp4';
+import logoImg from './assets/logo.png';
 
+import { PiSuitcaseFill } from "react-icons/pi";
+// Hàm tính khoảng cách để dùng gps
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371; 
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -16,85 +19,20 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
-// --- Component Video Overlay (Tách ra để dễ quản lý useRef) ---
-const VideoOverlay = ({ onEnded }) => {
-  const videoRef = useRef(null); // 2. Tạo ref cho thẻ video
-
-  useEffect(() => {
-    // 3. Khi component này được mount (hiển thị), ép buộc phát video
-    if (videoRef.current) {
-      const playPromise = videoRef.current.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            // Video đang phát mượt mà
-            console.log("Video started playing successfully");
-          })
-          .catch((error) => {
-            // Trình duyệt chặn autoplay hoặc có lỗi file
-            console.error("Video autoplay failed:", error);
-            // Có thể hiện 1 nút "Play" to ở giữa nếu bị chặn, hoặc skip luôn
-            // videoRef.current.controls = true; // Hiện controls để user tự bấm play nếu cần
-          });
-      }
-    }
-  }, []);
-
-  return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-      backgroundColor: 'black', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center'
-    }}>
-      <video 
-        ref={videoRef} // 4. Gán ref vào đây
-        src={introVideo} 
-        muted // Giữ muted để tăng khả năng được cho phép autoplay
-        playsInline
-        webkit-playsinline="true"
-        onEnded={onEnded} 
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-      />
-      <button 
-        onClick={onEnded}
-        style={{
-          position: 'absolute', top: '20px', right: '20px', padding: '10px 20px',
-          backgroundColor: 'rgba(0,0,0,0.5)', color: 'white', border: '1px solid white',
-          borderRadius: '8px', cursor: 'pointer', fontFamily: '"Segoe UI", sans-serif',
-          zIndex: 10000, fontSize: '16px'
-        }}
-      >
-        Skip ❯
-      </button>
-    </div>
-  );
-};
-// ------------------------------------------------------------------
-
 const Home = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
-  const [mapData, setMapData] = useState(null);
   const [error, setError] = useState(null);
-
-  const handleVideoEnd = () => {
-    setShowVideo(false);
-    navigate('/map', { state: mapData }); 
-  };
 
   const handleStart = () => {
     if (isLoading) return; 
     setIsLoading(true);
     setError(null);
-
     const sapaSample = `Tọa độ: Fansipan View (Mặc định)`; 
     const defaultArea = "Khu vực Mường Hoa"; 
-
     const handleReady = (locationData, finalAreaData) => {
-      setMapData({ gpsInfo: locationData, areaData: finalAreaData });
       setIsLoading(false);
-      setShowVideo(true); // Hiển thị VideoOverlay
+      navigate('/map', { state: { gpsInfo: locationData, areaData: finalAreaData } }); 
     };
 
     if ("geolocation" in navigator) {
@@ -103,21 +41,17 @@ const Home = () => {
           const { latitude, longitude } = position.coords;
           let minDistance = Infinity;
           let nearestArea = defaultArea;
-
           fansipanData.features.forEach(feature => {
             const fLat = feature.geometry.coordinates[1];
             const fLng = feature.geometry.coordinates[0];
             const dist = calculateDistance(latitude, longitude, fLat, fLng);
-            
             if (dist < minDistance) {
               minDistance = dist;
               nearestArea = feature.properties.area;
             }
           });
-
           let locationData = "";
           let finalAreaData = "";
-
           if (minDistance > 100) { 
             locationData = `Tọa độ: Fansipan View`;
             finalAreaData = defaultArea;
@@ -140,60 +74,106 @@ const Home = () => {
   };
 
   return (
-    <>
-      {/* Sử dụng component VideoOverlay đã tách riêng */}
-      {showVideo && <VideoOverlay onEnded={handleVideoEnd} />}
-
-      {!showVideo && (
-        <div className="landing-page" style={{ position: 'relative' }}>
-          {error && (
-            <div style={{
-              position: 'absolute', top: 10, left: 10, right: 10, 
-              padding: '10px', backgroundColor: '#ffcccc', color: '#990000', 
-              borderRadius: '5px', textAlign: 'center', zIndex: 10
-            }}>
-              {error}
-            </div>
-          )}
-          <div className="content-container">
-            <div className="map-icon-circle">
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
-                <line x1="8" y1="2" x2="8" y2="18"></line>
-                <line x1="16" y1="6" x2="16" y2="22"></line>
-              </svg>
-            </div>
-
-            <h1 className="brand-name" style={{ 
-              fontFamily: '"Segoe UI", sans-serif', 
-              fontWeight: 900, 
-              letterSpacing: '-2px',
-              color: '#1a2b49',
-              marginBottom: '30px'
-            }}>
-              Sunworld Fansipan Legend
-            </h1>
-
-            <button 
-              className="btn-start" 
-              onClick={handleStart} 
-              disabled={isLoading}
-              style={{ 
-                fontFamily: '"Segoe UI", sans-serif', 
-                fontWeight: 600,
-                cursor: isLoading ? 'wait' : 'pointer', 
-                opacity: isLoading ? 0.7 : 1,
-                padding: '15px 40px',
-                fontSize: '18px'
-              }}
-            >
-              {isLoading ? "Đang định vị..." : "Khám Phá Bản Đồ"} 
-              {!isLoading && <span style={{ marginLeft: '10px' }}>→</span>}
-            </button>
-          </div>
+    <div className="landing-page" style={{ 
+      position: 'relative',
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'flex-start',
+      paddingTop: '20px', // Đẩy nội dung lên sát mép trên
+      minHeight: '100vh',
+      textAlign: 'center',
+      backgroundColor: '#ffffff' 
+    }}>
+      
+      {/* Hiển thị lỗi định vị (nếu có) */}
+      {error && (
+        <div style={{
+          position: 'absolute', top: 10, left: 10, right: 10, 
+          padding: '10px', backgroundColor: '#ffcccc', color: '#990000', 
+          borderRadius: '5px', textAlign: 'center', zIndex: 10
+        }}>
+          {error}
         </div>
       )}
-    </>
+
+      {/* 1. Header Logo */}
+      <div className="header-logo" style={{ 
+        width: '100%', 
+        padding: '10px 0', 
+        marginBottom: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        borderBottom: '1px solid #eaeaea' // Đường viền mỏng ngăn cách header giống web thực
+      }}>
+        <img 
+          src={logoImg} 
+          alt="Sunworld Fansipan Legend Logo" 
+          style={{ width: '150px', height: 'auto' }} 
+        />
+      </div>
+
+      {/* 2. Khung Video thu nhỏ */}
+      <div className="video-preview-container" style={{
+        width: '90%',
+        maxWidth: '450px',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
+        marginBottom: '30px'
+      }}>
+        <video 
+          src={introVideo} 
+          autoPlay 
+          muted 
+          loop 
+          playsInline // Rất quan trọng để video tự chạy trên iOS
+          webkit-playsinline="true"
+          style={{ width: '100%', display: 'block', objectFit: 'cover' }}
+        />
+      </div>
+      {/* 3. Lời chúc */}
+      <div className="rounded-box">
+        <p style={{ 
+          display: 'flex', 
+          alignItems: 'center', // Căn giữa icon và chữ theo chiều dọc
+          justifyContent: 'center', 
+          gap: '12px', // Khoảng cách giữa icon và chữ
+          margin: 0,
+          textAlign: 'left'
+        }}>
+          {/* Icon Vali với kích thước và màu sắc tùy chỉnh */}
+          <PiSuitcaseFill size={32} color="#d82b2b" style={{ flexShrink: 0 }} />
+          
+          <span>
+            Chúc bạn có trải nghiệm thật thú vị và một chuyến tham quan tuyệt vời tại đây!
+          </span>
+        </p>
+      </div>
+
+      {/* 4. Nút Khám Phá */}
+      <button 
+        className="btn-start" 
+        onClick={handleStart} 
+        disabled={isLoading}
+        style={{ 
+          fontFamily: '"Segoe UI", sans-serif', 
+          fontWeight: 'bold',
+          cursor: isLoading ? 'wait' : 'pointer', 
+          opacity: isLoading ? 0.7 : 1,
+          padding: '15px 45px',
+          fontSize: '18px',
+          backgroundColor: '#d82b2b', // Màu đỏ tone Sunworld
+          color: 'white',
+          border: 'none',
+          borderRadius: '30px',
+          boxShadow: '0 4px 12px rgba(216, 43, 43, 0.4)'
+        }}
+      >
+        {isLoading ? "Đang định vị..." : "Khám Phá Bản Đồ"}
+      </button>
+
+    </div>
   );
 };
 
