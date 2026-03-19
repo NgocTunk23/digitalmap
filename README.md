@@ -45,8 +45,10 @@ npm install
 npm run dev
 ```
 ### 2. Chạy với Docker
+```
 # Di chuyển vào thư mục gốc của dự án
 cd digitalmap
 
 # Build và chạy container
 docker-compose up -d --build
+```
