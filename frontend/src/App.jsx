@@ -115,9 +115,9 @@ const Home = () => {
 
       {/* 2. Khung Video thu nhỏ */}
       <div className="video-preview-container" style={{
-        width: '90%',
-        maxWidth: '450px',
-        borderRadius: '12px',
+        width: '95%',
+        maxWidth: '800px',
+        borderRadius: '15px',
         overflow: 'hidden',
         boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
         marginBottom: '30px'
